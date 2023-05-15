@@ -23,6 +23,8 @@ def _get_kwargs(
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    headers["Content-type"] = "application/merge-patch+json"
+
     params: Dict[str, Any] = {}
     params["marker"] = marker
 

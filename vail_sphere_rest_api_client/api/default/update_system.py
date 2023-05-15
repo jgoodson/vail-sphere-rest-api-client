@@ -21,6 +21,8 @@ def _get_kwargs(
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    headers["Content-type"] = "application/merge-patch+json"
+
     json_json_body = json_body.to_dict()
 
     return {
