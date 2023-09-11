@@ -5,8 +5,8 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.api_credentials import ApiCredentials
-from ...models.api_token import ApiToken
+from ...models.rest_credentials import RestCredentials
+from ...models.rest_token import RestToken
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import Response
 
@@ -14,7 +14,7 @@ from ...types import Response
 def _get_kwargs(
     *,
     client: Client,
-    json_body: ApiCredentials,
+    json_body: RestCredentials,
 ) -> Dict[str, Any]:
     url = "{}/sl/api/tokens".format(client.base_url)
 
@@ -36,9 +36,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[Union[ApiToken, ServerValidationErrorResponse]]:
+) -> Optional[Union[RestToken, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.CREATED:
-        response_201 = ApiToken.from_dict(response.json())
+        response_201 = RestToken.from_dict(response.json())
 
         return response_201
     if response.status_code == HTTPStatus.BAD_REQUEST:
@@ -53,7 +53,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[Union[ApiToken, ServerValidationErrorResponse]]:
+) -> Response[Union[RestToken, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -65,19 +65,19 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
-    json_body: ApiCredentials,
-) -> Response[Union[ApiToken, ServerValidationErrorResponse]]:
+    json_body: RestCredentials,
+) -> Response[Union[RestToken, ServerValidationErrorResponse]]:
     """Create a JSON Web Token. Create a credential if invalid key/credential detected.
 
     Args:
-        json_body (ApiCredentials):
+        json_body (RestCredentials):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[ApiToken, ServerValidationErrorResponse]]
+        Response[Union[RestToken, ServerValidationErrorResponse]]
     """
 
     kwargs = _get_kwargs(
@@ -96,19 +96,19 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
-    json_body: ApiCredentials,
-) -> Optional[Union[ApiToken, ServerValidationErrorResponse]]:
+    json_body: RestCredentials,
+) -> Optional[Union[RestToken, ServerValidationErrorResponse]]:
     """Create a JSON Web Token. Create a credential if invalid key/credential detected.
 
     Args:
-        json_body (ApiCredentials):
+        json_body (RestCredentials):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[ApiToken, ServerValidationErrorResponse]
+        Union[RestToken, ServerValidationErrorResponse]
     """
 
     return sync_detailed(
@@ -120,19 +120,19 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
-    json_body: ApiCredentials,
-) -> Response[Union[ApiToken, ServerValidationErrorResponse]]:
+    json_body: RestCredentials,
+) -> Response[Union[RestToken, ServerValidationErrorResponse]]:
     """Create a JSON Web Token. Create a credential if invalid key/credential detected.
 
     Args:
-        json_body (ApiCredentials):
+        json_body (RestCredentials):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[ApiToken, ServerValidationErrorResponse]]
+        Response[Union[RestToken, ServerValidationErrorResponse]]
     """
 
     kwargs = _get_kwargs(
@@ -149,19 +149,19 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
-    json_body: ApiCredentials,
-) -> Optional[Union[ApiToken, ServerValidationErrorResponse]]:
+    json_body: RestCredentials,
+) -> Optional[Union[RestToken, ServerValidationErrorResponse]]:
     """Create a JSON Web Token. Create a credential if invalid key/credential detected.
 
     Args:
-        json_body (ApiCredentials):
+        json_body (RestCredentials):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[ApiToken, ServerValidationErrorResponse]
+        Union[RestToken, ServerValidationErrorResponse]
     """
 
     return (

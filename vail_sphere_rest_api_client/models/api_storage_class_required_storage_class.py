@@ -2,7 +2,6 @@ from enum import Enum
 
 
 class ApiStorageClassRequiredStorageClass(str, Enum):
-    ANY = "ANY"
     DEEP_ARCHIVE = "DEEP_ARCHIVE"
     GLACIER = "GLACIER"
     GLACIER_IR = "GLACIER_IR"

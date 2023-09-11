@@ -3,6 +3,7 @@ from enum import Enum
 
 class ApiEndpointStatus(str, Enum):
     DEGRADED = "degraded"
+    DELETING = "deleting"
     OK = "ok"
     UNAVAILABLE = "unavailable"
     UPDATING = "updating"

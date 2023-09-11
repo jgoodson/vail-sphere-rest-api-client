@@ -1,9 +1,12 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 import attr
 
-from ..models.api_storage_used_storage_class import ApiStorageUsedStorageClass
 from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.api_storage_entity import ApiStorageEntity
+
 
 T = TypeVar("T", bound="ApiStorageUsed")
 
@@ -12,48 +15,108 @@ T = TypeVar("T", bound="ApiStorageUsed")
 class ApiStorageUsed:
     """
     Attributes:
-        id (str): Storage ID
-        storage_class (ApiStorageUsedStorageClass): Storage class
-        data (Union[Unset, int]): Portion of physical media used by this storage for object data
+        storage (List['ApiStorageEntity']): Space used by each storage that shares this physical media
+        data (Union[Unset, int]): Number of bytes of object data stored
+        endpoint (Union[Unset, str]): Endpoint that hosts this storage
+        entity (Union[Unset, str]): Identifier for underlying physical media
+        label (Union[Unset, str]): Label for bundled capacity information
+        location (Union[Unset, str]): ID of location
+        partial (Union[Unset, bool]): Indicates summary information is incomplete
+        total (Union[Unset, int]): Maximum capacity (if storage has one)
+        used (Union[Unset, int]): Number of bytes of physical media used (including overhead)
     """
 
-    id: str
-    storage_class: ApiStorageUsedStorageClass
+    storage: List["ApiStorageEntity"]
     data: Union[Unset, int] = UNSET
+    endpoint: Union[Unset, str] = UNSET
+    entity: Union[Unset, str] = UNSET
+    label: Union[Unset, str] = UNSET
+    location: Union[Unset, str] = UNSET
+    partial: Union[Unset, bool] = UNSET
+    total: Union[Unset, int] = UNSET
+    used: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        id = self.id
-        storage_class = self.storage_class.value
+        storage = []
+        for storage_item_data in self.storage:
+            storage_item = storage_item_data.to_dict()
+
+            storage.append(storage_item)
 
         data = self.data
+        endpoint = self.endpoint
+        entity = self.entity
+        label = self.label
+        location = self.location
+        partial = self.partial
+        total = self.total
+        used = self.used
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "id": id,
-                "storageClass": storage_class,
+                "storage": storage,
             }
         )
         if data is not UNSET:
             field_dict["data"] = data
+        if endpoint is not UNSET:
+            field_dict["endpoint"] = endpoint
+        if entity is not UNSET:
+            field_dict["entity"] = entity
+        if label is not UNSET:
+            field_dict["label"] = label
+        if location is not UNSET:
+            field_dict["location"] = location
+        if partial is not UNSET:
+            field_dict["partial"] = partial
+        if total is not UNSET:
+            field_dict["total"] = total
+        if used is not UNSET:
+            field_dict["used"] = used
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        d = src_dict.copy()
-        id = d.pop("id")
+        from ..models.api_storage_entity import ApiStorageEntity
 
-        storage_class = ApiStorageUsedStorageClass(d.pop("storageClass"))
+        d = src_dict.copy()
+        storage = []
+        _storage = d.pop("storage")
+        for storage_item_data in _storage:
+            storage_item = ApiStorageEntity.from_dict(storage_item_data)
+
+            storage.append(storage_item)
 
         data = d.pop("data", UNSET)
 
+        endpoint = d.pop("endpoint", UNSET)
+
+        entity = d.pop("entity", UNSET)
+
+        label = d.pop("label", UNSET)
+
+        location = d.pop("location", UNSET)
+
+        partial = d.pop("partial", UNSET)
+
+        total = d.pop("total", UNSET)
+
+        used = d.pop("used", UNSET)
+
         api_storage_used = cls(
-            id=id,
-            storage_class=storage_class,
+            storage=storage,
             data=data,
+            endpoint=endpoint,
+            entity=entity,
+            label=label,
+            location=location,
+            partial=partial,
+            total=total,
+            used=used,
         )
 
         api_storage_used.additional_properties = d

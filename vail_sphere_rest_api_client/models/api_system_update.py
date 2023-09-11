@@ -14,17 +14,20 @@ class ApiSystemUpdate:
         key (Union[Unset, str]): The sphere activation key
         monitor (Union[Unset, bool]): True if monitor events are sent to SpectraLogic.
         name (Union[Unset, str]): Name of the system
+        nightly (Union[Unset, str]): Nightly processing time (in UTC).
     """
 
     key: Union[Unset, str] = UNSET
     monitor: Union[Unset, bool] = UNSET
     name: Union[Unset, str] = UNSET
+    nightly: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         key = self.key
         monitor = self.monitor
         name = self.name
+        nightly = self.nightly
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -35,6 +38,8 @@ class ApiSystemUpdate:
             field_dict["monitor"] = monitor
         if name is not UNSET:
             field_dict["name"] = name
+        if nightly is not UNSET:
+            field_dict["nightly"] = nightly
 
         return field_dict
 
@@ -47,10 +52,13 @@ class ApiSystemUpdate:
 
         name = d.pop("name", UNSET)
 
+        nightly = d.pop("nightly", UNSET)
+
         api_system_update = cls(
             key=key,
             monitor=monitor,
             name=name,
+            nightly=nightly,
         )
 
         api_system_update.additional_properties = d

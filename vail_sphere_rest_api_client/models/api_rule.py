@@ -24,6 +24,8 @@ class ApiRule:
         exclude (Union[Unset, str]): Regular expression that must not match the object name
         expiration (Union[Unset, bool]): Expiration is a deletion without destinations that deletes the object version
         include (Union[Unset, str]): Regular expression that must match the object name
+        noncurrent_versions (Union[Unset, int]): How many noncurrent versions for the rule to keep. Once this number is
+            exceeded, the oldest noncurrent version is expired.
         schedule (Union[Unset, ApiRuleSchedule]):
     """
 
@@ -34,6 +36,7 @@ class ApiRule:
     exclude: Union[Unset, str] = UNSET
     expiration: Union[Unset, bool] = UNSET
     include: Union[Unset, str] = UNSET
+    noncurrent_versions: Union[Unset, int] = UNSET
     schedule: Union[Unset, "ApiRuleSchedule"] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -51,6 +54,7 @@ class ApiRule:
         exclude = self.exclude
         expiration = self.expiration
         include = self.include
+        noncurrent_versions = self.noncurrent_versions
         schedule: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.schedule, Unset):
             schedule = self.schedule.to_dict()
@@ -74,6 +78,8 @@ class ApiRule:
             field_dict["expiration"] = expiration
         if include is not UNSET:
             field_dict["include"] = include
+        if noncurrent_versions is not UNSET:
+            field_dict["noncurrentVersions"] = noncurrent_versions
         if schedule is not UNSET:
             field_dict["schedule"] = schedule
 
@@ -109,6 +115,8 @@ class ApiRule:
 
         include = d.pop("include", UNSET)
 
+        noncurrent_versions = d.pop("noncurrentVersions", UNSET)
+
         _schedule = d.pop("schedule", UNSET)
         schedule: Union[Unset, ApiRuleSchedule]
         if isinstance(_schedule, Unset):
@@ -124,6 +132,7 @@ class ApiRule:
             exclude=exclude,
             expiration=expiration,
             include=include,
+            noncurrent_versions=noncurrent_versions,
             schedule=schedule,
         )
 

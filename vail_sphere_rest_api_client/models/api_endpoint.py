@@ -1,14 +1,10 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, Type, TypeVar, Union, cast
 
 import attr
 
 from ..models.api_endpoint_status import ApiEndpointStatus
 from ..models.api_endpoint_type import ApiEndpointType
 from ..types import UNSET, Unset
-
-if TYPE_CHECKING:
-    from ..models.api_update_version import ApiUpdateVersion
-
 
 T = TypeVar("T", bound="ApiEndpoint")
 
@@ -17,97 +13,92 @@ T = TypeVar("T", bound="ApiEndpoint")
 class ApiEndpoint:
     """
     Attributes:
-        endpoint (str): endpoint network address
         id (str): Endpoint identifier
         location (str): ID of physical location
         type (ApiEndpointType): Type of system running at this endpoint
-        current_version (Union[Unset, str]): current version
-        management_endpoint (Union[Unset, str]): endpoint for system management endpoint (if available)
+        url (str): endpoint S3 URL
+        debug (Union[Unset, int]): debug level (0-9)
+        hosts (Union[Unset, List[str]]): additional supported hostnames
+        management_url (Union[Unset, str]): URL for DS3 system management (if available)
         name (Union[Unset, str]): Name of endpoint (hostname is default).
-        preferred_version (Union[Unset, str]): preferred version
         status (Union[Unset, ApiEndpointStatus]): Status
-        versions (Union[Unset, List['ApiUpdateVersion']]): map of available versions
+        version (Union[Unset, str]): current version
     """
 
-    endpoint: str
     id: str
     location: str
     type: ApiEndpointType
-    current_version: Union[Unset, str] = UNSET
-    management_endpoint: Union[Unset, str] = UNSET
+    url: str
+    debug: Union[Unset, int] = UNSET
+    hosts: Union[Unset, List[str]] = UNSET
+    management_url: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
-    preferred_version: Union[Unset, str] = UNSET
     status: Union[Unset, ApiEndpointStatus] = UNSET
-    versions: Union[Unset, List["ApiUpdateVersion"]] = UNSET
+    version: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        endpoint = self.endpoint
         id = self.id
         location = self.location
         type = self.type.value
 
-        current_version = self.current_version
-        management_endpoint = self.management_endpoint
+        url = self.url
+        debug = self.debug
+        hosts: Union[Unset, List[str]] = UNSET
+        if not isinstance(self.hosts, Unset):
+            hosts = self.hosts
+
+        management_url = self.management_url
         name = self.name
-        preferred_version = self.preferred_version
         status: Union[Unset, str] = UNSET
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-        versions: Union[Unset, List[Dict[str, Any]]] = UNSET
-        if not isinstance(self.versions, Unset):
-            versions = []
-            for versions_item_data in self.versions:
-                versions_item = versions_item_data.to_dict()
-
-                versions.append(versions_item)
+        version = self.version
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "endpoint": endpoint,
                 "id": id,
                 "location": location,
                 "type": type,
+                "url": url,
             }
         )
-        if current_version is not UNSET:
-            field_dict["currentVersion"] = current_version
-        if management_endpoint is not UNSET:
-            field_dict["managementEndpoint"] = management_endpoint
+        if debug is not UNSET:
+            field_dict["debug"] = debug
+        if hosts is not UNSET:
+            field_dict["hosts"] = hosts
+        if management_url is not UNSET:
+            field_dict["managementURL"] = management_url
         if name is not UNSET:
             field_dict["name"] = name
-        if preferred_version is not UNSET:
-            field_dict["preferredVersion"] = preferred_version
         if status is not UNSET:
             field_dict["status"] = status
-        if versions is not UNSET:
-            field_dict["versions"] = versions
+        if version is not UNSET:
+            field_dict["version"] = version
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.api_update_version import ApiUpdateVersion
-
         d = src_dict.copy()
-        endpoint = d.pop("endpoint")
-
         id = d.pop("id")
 
         location = d.pop("location")
 
         type = ApiEndpointType(d.pop("type"))
 
-        current_version = d.pop("currentVersion", UNSET)
+        url = d.pop("url")
 
-        management_endpoint = d.pop("managementEndpoint", UNSET)
+        debug = d.pop("debug", UNSET)
+
+        hosts = cast(List[str], d.pop("hosts", UNSET))
+
+        management_url = d.pop("managementURL", UNSET)
 
         name = d.pop("name", UNSET)
-
-        preferred_version = d.pop("preferredVersion", UNSET)
 
         _status = d.pop("status", UNSET)
         status: Union[Unset, ApiEndpointStatus]
@@ -116,24 +107,19 @@ class ApiEndpoint:
         else:
             status = ApiEndpointStatus(_status)
 
-        versions = []
-        _versions = d.pop("versions", UNSET)
-        for versions_item_data in _versions or []:
-            versions_item = ApiUpdateVersion.from_dict(versions_item_data)
-
-            versions.append(versions_item)
+        version = d.pop("version", UNSET)
 
         api_endpoint = cls(
-            endpoint=endpoint,
             id=id,
             location=location,
             type=type,
-            current_version=current_version,
-            management_endpoint=management_endpoint,
+            url=url,
+            debug=debug,
+            hosts=hosts,
+            management_url=management_url,
             name=name,
-            preferred_version=preferred_version,
             status=status,
-            versions=versions,
+            version=version,
         )
 
         api_endpoint.additional_properties = d

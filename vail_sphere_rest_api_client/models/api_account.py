@@ -13,6 +13,7 @@ class ApiAccount:
     Attributes:
         canonical_id (Union[Unset, str]): AWS canonical ID
         default (Union[Unset, bool]): True if this is the default bucket owner account
+        description (Union[Unset, str]): The AWS Account's description.
         email (Union[Unset, str]): The user's email associated with the AWS Account.
         external_id (Union[Unset, str]): External ID
         id (Union[Unset, str]): AWS account ID
@@ -22,6 +23,7 @@ class ApiAccount:
 
     canonical_id: Union[Unset, str] = UNSET
     default: Union[Unset, bool] = UNSET
+    description: Union[Unset, str] = UNSET
     email: Union[Unset, str] = UNSET
     external_id: Union[Unset, str] = UNSET
     id: Union[Unset, str] = UNSET
@@ -32,6 +34,7 @@ class ApiAccount:
     def to_dict(self) -> Dict[str, Any]:
         canonical_id = self.canonical_id
         default = self.default
+        description = self.description
         email = self.email
         external_id = self.external_id
         id = self.id
@@ -45,6 +48,8 @@ class ApiAccount:
             field_dict["canonicalId"] = canonical_id
         if default is not UNSET:
             field_dict["default"] = default
+        if description is not UNSET:
+            field_dict["description"] = description
         if email is not UNSET:
             field_dict["email"] = email
         if external_id is not UNSET:
@@ -65,6 +70,8 @@ class ApiAccount:
 
         default = d.pop("default", UNSET)
 
+        description = d.pop("description", UNSET)
+
         email = d.pop("email", UNSET)
 
         external_id = d.pop("externalId", UNSET)
@@ -78,6 +85,7 @@ class ApiAccount:
         api_account = cls(
             canonical_id=canonical_id,
             default=default,
+            description=description,
             email=email,
             external_id=external_id,
             id=id,

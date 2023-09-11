@@ -11,18 +11,23 @@ T = TypeVar("T", bound="ApiAccountUpdate")
 class ApiAccountUpdate:
     """
     Attributes:
+        description (Union[Unset, str]): The AWS Account's description.
         email (Union[Unset, str]): The user's email associated with the AWS Account.
     """
 
+    description: Union[Unset, str] = UNSET
     email: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        description = self.description
         email = self.email
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if description is not UNSET:
+            field_dict["description"] = description
         if email is not UNSET:
             field_dict["email"] = email
 
@@ -31,9 +36,12 @@ class ApiAccountUpdate:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
+        description = d.pop("description", UNSET)
+
         email = d.pop("email", UNSET)
 
         api_account_update = cls(
+            description=description,
             email=email,
         )
 

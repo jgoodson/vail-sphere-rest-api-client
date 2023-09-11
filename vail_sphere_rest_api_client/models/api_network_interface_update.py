@@ -16,8 +16,8 @@ class ApiNetworkInterfaceUpdate:
     """
     Attributes:
         addresses (Union[Unset, List[str]]): Bound Network Addresses
+        auto6 (Union[Unset, bool]): IPV6 Automatic Configuration Enabled
         dhcp4 (Union[Unset, bool]): IPV4 DHCP Enabled
-        dhcp6 (Union[Unset, bool]): IPV6 DHCP Enabled
         dhcp_dns (Union[Unset, bool]): Use DHCP for DNS
         gateway4 (Union[Unset, str]): Configured IPV4 Gateway
         gateway6 (Union[Unset, str]): Configured IPV6 Gateway
@@ -28,8 +28,8 @@ class ApiNetworkInterfaceUpdate:
     """
 
     addresses: Union[Unset, List[str]] = UNSET
+    auto6: Union[Unset, bool] = UNSET
     dhcp4: Union[Unset, bool] = UNSET
-    dhcp6: Union[Unset, bool] = UNSET
     dhcp_dns: Union[Unset, bool] = UNSET
     gateway4: Union[Unset, str] = UNSET
     gateway6: Union[Unset, str] = UNSET
@@ -44,8 +44,8 @@ class ApiNetworkInterfaceUpdate:
         if not isinstance(self.addresses, Unset):
             addresses = self.addresses
 
+        auto6 = self.auto6
         dhcp4 = self.dhcp4
-        dhcp6 = self.dhcp6
         dhcp_dns = self.dhcp_dns
         gateway4 = self.gateway4
         gateway6 = self.gateway6
@@ -71,10 +71,10 @@ class ApiNetworkInterfaceUpdate:
         field_dict.update({})
         if addresses is not UNSET:
             field_dict["addresses"] = addresses
+        if auto6 is not UNSET:
+            field_dict["auto6"] = auto6
         if dhcp4 is not UNSET:
             field_dict["dhcp4"] = dhcp4
-        if dhcp6 is not UNSET:
-            field_dict["dhcp6"] = dhcp6
         if dhcp_dns is not UNSET:
             field_dict["dhcpDns"] = dhcp_dns
         if gateway4 is not UNSET:
@@ -99,9 +99,9 @@ class ApiNetworkInterfaceUpdate:
         d = src_dict.copy()
         addresses = cast(List[str], d.pop("addresses", UNSET))
 
-        dhcp4 = d.pop("dhcp4", UNSET)
+        auto6 = d.pop("auto6", UNSET)
 
-        dhcp6 = d.pop("dhcp6", UNSET)
+        dhcp4 = d.pop("dhcp4", UNSET)
 
         dhcp_dns = d.pop("dhcpDns", UNSET)
 
@@ -124,8 +124,8 @@ class ApiNetworkInterfaceUpdate:
 
         api_network_interface_update = cls(
             addresses=addresses,
+            auto6=auto6,
             dhcp4=dhcp4,
-            dhcp6=dhcp6,
             dhcp_dns=dhcp_dns,
             gateway4=gateway4,
             gateway6=gateway6,

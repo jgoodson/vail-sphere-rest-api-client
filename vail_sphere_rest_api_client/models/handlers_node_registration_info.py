@@ -4,7 +4,7 @@ import attr
 
 if TYPE_CHECKING:
     from ..models.api_system import ApiSystem
-    from ..models.api_token import ApiToken
+    from ..models.rest_token import RestToken
 
 
 T = TypeVar("T", bound="HandlersNodeRegistrationInfo")
@@ -15,11 +15,11 @@ class HandlersNodeRegistrationInfo:
     """
     Attributes:
         system (ApiSystem):
-        token (ApiToken):
+        token (RestToken):
     """
 
     system: "ApiSystem"
-    token: "ApiToken"
+    token: "RestToken"
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -41,12 +41,12 @@ class HandlersNodeRegistrationInfo:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.api_system import ApiSystem
-        from ..models.api_token import ApiToken
+        from ..models.rest_token import RestToken
 
         d = src_dict.copy()
         system = ApiSystem.from_dict(d.pop("system"))
 
-        token = ApiToken.from_dict(d.pop("token"))
+        token = RestToken.from_dict(d.pop("token"))
 
         handlers_node_registration_info = cls(
             system=system,

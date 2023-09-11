@@ -5,15 +5,15 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.api_credentials import ApiCredentials
-from ...models.api_sphere_token import ApiSphereToken
+from ...models.rest_credentials import RestCredentials
+from ...models.rest_sphere_token import RestSphereToken
 from ...types import Response
 
 
 def _get_kwargs(
     *,
     client: Client,
-    json_body: ApiCredentials,
+    json_body: RestCredentials,
 ) -> Dict[str, Any]:
     url = "{}/sl/api/sphere/tokens".format(client.base_url)
 
@@ -33,9 +33,9 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[ApiSphereToken]:
+def _parse_response(*, client: Client, response: httpx.Response) -> Optional[RestSphereToken]:
     if response.status_code == HTTPStatus.CREATED:
-        response_201 = ApiSphereToken.from_dict(response.json())
+        response_201 = RestSphereToken.from_dict(response.json())
 
         return response_201
     if client.raise_on_unexpected_status:
@@ -44,7 +44,7 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Api
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[ApiSphereToken]:
+def _build_response(*, client: Client, response: httpx.Response) -> Response[RestSphereToken]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -56,19 +56,19 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Api
 def sync_detailed(
     *,
     client: Client,
-    json_body: ApiCredentials,
-) -> Response[ApiSphereToken]:
+    json_body: RestCredentials,
+) -> Response[RestSphereToken]:
     """Get a token from the given sphere
 
     Args:
-        json_body (ApiCredentials):
+        json_body (RestCredentials):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiSphereToken]
+        Response[RestSphereToken]
     """
 
     kwargs = _get_kwargs(
@@ -87,19 +87,19 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
-    json_body: ApiCredentials,
-) -> Optional[ApiSphereToken]:
+    json_body: RestCredentials,
+) -> Optional[RestSphereToken]:
     """Get a token from the given sphere
 
     Args:
-        json_body (ApiCredentials):
+        json_body (RestCredentials):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiSphereToken
+        RestSphereToken
     """
 
     return sync_detailed(
@@ -111,19 +111,19 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
-    json_body: ApiCredentials,
-) -> Response[ApiSphereToken]:
+    json_body: RestCredentials,
+) -> Response[RestSphereToken]:
     """Get a token from the given sphere
 
     Args:
-        json_body (ApiCredentials):
+        json_body (RestCredentials):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiSphereToken]
+        Response[RestSphereToken]
     """
 
     kwargs = _get_kwargs(
@@ -140,19 +140,19 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
-    json_body: ApiCredentials,
-) -> Optional[ApiSphereToken]:
+    json_body: RestCredentials,
+) -> Optional[RestSphereToken]:
     """Get a token from the given sphere
 
     Args:
-        json_body (ApiCredentials):
+        json_body (RestCredentials):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiSphereToken
+        RestSphereToken
     """
 
     return (
