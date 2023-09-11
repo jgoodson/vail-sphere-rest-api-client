@@ -34,7 +34,7 @@ class ApiBucket:
         encrypt (Union[Unset, bool]): True if contents are encrypted
         ignore_public_acls (Union[Unset, bool]): True if public access control lists for this bucket and its objects are
             ignored
-        lifecycle (Union[Unset, str]): The bucket's lifecycle
+        lifecycle (Union[Unset, str]): The ID of the bucket's lifecycle
         linked_storage (Union[Unset, str]): Cloud or BlackPearl storage to use for linking
         locking (Union[Unset, bool]): True if object locking is enabled
         owner (Union[Unset, str]): The bucket's owner

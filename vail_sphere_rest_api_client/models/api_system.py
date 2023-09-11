@@ -18,6 +18,8 @@ class ApiSystem:
         id (Union[Unset, str]): System identifier. Only present if the system is registered.
         key (Union[Unset, str]): The sphere activation key. Only present if the system is registered.
         monitor (Union[Unset, bool]): True if monitor events are sent to SpectraLogic.
+        namespace (Union[Unset, str]): The sphere name. Only present if the system is activated.
+        nightly (Union[Unset, str]): Nightly processing time (in UTC).
         sphere (Union[Unset, str]): The sphere credentials endpoint. Only present if the system is activated.
     """
 
@@ -27,6 +29,8 @@ class ApiSystem:
     id: Union[Unset, str] = UNSET
     key: Union[Unset, str] = UNSET
     monitor: Union[Unset, bool] = UNSET
+    namespace: Union[Unset, str] = UNSET
+    nightly: Union[Unset, str] = UNSET
     sphere: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -38,6 +42,8 @@ class ApiSystem:
         id = self.id
         key = self.key
         monitor = self.monitor
+        namespace = self.namespace
+        nightly = self.nightly
         sphere = self.sphere
 
         field_dict: Dict[str, Any] = {}
@@ -55,6 +61,10 @@ class ApiSystem:
             field_dict["key"] = key
         if monitor is not UNSET:
             field_dict["monitor"] = monitor
+        if namespace is not UNSET:
+            field_dict["namespace"] = namespace
+        if nightly is not UNSET:
+            field_dict["nightly"] = nightly
         if sphere is not UNSET:
             field_dict["sphere"] = sphere
 
@@ -75,6 +85,10 @@ class ApiSystem:
 
         monitor = d.pop("monitor", UNSET)
 
+        namespace = d.pop("namespace", UNSET)
+
+        nightly = d.pop("nightly", UNSET)
+
         sphere = d.pop("sphere", UNSET)
 
         api_system = cls(
@@ -84,6 +98,8 @@ class ApiSystem:
             id=id,
             key=key,
             monitor=monitor,
+            namespace=namespace,
+            nightly=nightly,
             sphere=sphere,
         )
 

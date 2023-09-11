@@ -13,15 +13,18 @@ class ApiEndpointRegistration:
     Attributes:
         location (str): ID of physical location
         name (Union[Unset, str]): Name of endpoint (hostname is default).
+        version (Union[Unset, str]): current version
     """
 
     location: str
     name: Union[Unset, str] = UNSET
+    version: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         location = self.location
         name = self.name
+        version = self.version
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -32,6 +35,8 @@ class ApiEndpointRegistration:
         )
         if name is not UNSET:
             field_dict["name"] = name
+        if version is not UNSET:
+            field_dict["version"] = version
 
         return field_dict
 
@@ -42,9 +47,12 @@ class ApiEndpointRegistration:
 
         name = d.pop("name", UNSET)
 
+        version = d.pop("version", UNSET)
+
         api_endpoint_registration = cls(
             location=location,
             name=name,
+            version=version,
         )
 
         api_endpoint_registration.additional_properties = d

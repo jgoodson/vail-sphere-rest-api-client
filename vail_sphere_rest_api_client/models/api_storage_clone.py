@@ -15,12 +15,14 @@ class ApiStorageClone:
         nearline (Union[Unset, bool]): Clone may require restore before access
         optional (Union[Unset, bool]): Clone will be deleted if space is needed
         partial (Union[Unset, bool]): Clone is not complete
+        restored (Union[Unset, bool]): Clone is currently restored
     """
 
     id: str
     nearline: Union[Unset, bool] = UNSET
     optional: Union[Unset, bool] = UNSET
     partial: Union[Unset, bool] = UNSET
+    restored: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -28,6 +30,7 @@ class ApiStorageClone:
         nearline = self.nearline
         optional = self.optional
         partial = self.partial
+        restored = self.restored
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -42,6 +45,8 @@ class ApiStorageClone:
             field_dict["optional"] = optional
         if partial is not UNSET:
             field_dict["partial"] = partial
+        if restored is not UNSET:
+            field_dict["restored"] = restored
 
         return field_dict
 
@@ -56,11 +61,14 @@ class ApiStorageClone:
 
         partial = d.pop("partial", UNSET)
 
+        restored = d.pop("restored", UNSET)
+
         api_storage_clone = cls(
             id=id,
             nearline=nearline,
             optional=optional,
             partial=partial,
+            restored=restored,
         )
 
         api_storage_clone.additional_properties = d

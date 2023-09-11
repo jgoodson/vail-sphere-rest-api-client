@@ -13,13 +13,15 @@ T = TypeVar("T", bound="ApiStorageUpdate")
 class ApiStorageUpdate:
     """
     Attributes:
-        access_key (Union[Unset, str]): The account owner's access key
+        access_key (Union[Unset, str]): The account owner's access key, or the Azure storage account
         alternate (Union[Unset, str]): ID of alternate storage to move clones to during delete
         arn (Union[Unset, str]): The IAM role arn to use to access the account.  This can be used as an alternative to
             providing accessKey and secretKey.
         caution_threshold (Union[Unset, int]): Caution threshold capacity for the storage
-        externalid (Union[Unset, str]): The IAM role's external ID.S
+        clone_restore (Union[Unset, bool]): Create a new clone when restoring this storage
+        externalid (Union[Unset, str]): The IAM role's external ID.
         name (Union[Unset, str]): Storage name
+        optional_data (Union[Unset, int]): Percentage of space available for optional data
         secret_key (Union[Unset, str]): The account owner's secret key
         status (Union[Unset, ApiStorageUpdateStatus]): Status can be set to deleting to begin background deletion
         storage_class (Union[Unset, ApiStorageUpdateStorageClass]): Storage class
@@ -30,8 +32,10 @@ class ApiStorageUpdate:
     alternate: Union[Unset, str] = UNSET
     arn: Union[Unset, str] = UNSET
     caution_threshold: Union[Unset, int] = UNSET
+    clone_restore: Union[Unset, bool] = UNSET
     externalid: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
+    optional_data: Union[Unset, int] = UNSET
     secret_key: Union[Unset, str] = UNSET
     status: Union[Unset, ApiStorageUpdateStatus] = UNSET
     storage_class: Union[Unset, ApiStorageUpdateStorageClass] = UNSET
@@ -43,8 +47,10 @@ class ApiStorageUpdate:
         alternate = self.alternate
         arn = self.arn
         caution_threshold = self.caution_threshold
+        clone_restore = self.clone_restore
         externalid = self.externalid
         name = self.name
+        optional_data = self.optional_data
         secret_key = self.secret_key
         status: Union[Unset, str] = UNSET
         if not isinstance(self.status, Unset):
@@ -67,10 +73,14 @@ class ApiStorageUpdate:
             field_dict["arn"] = arn
         if caution_threshold is not UNSET:
             field_dict["cautionThreshold"] = caution_threshold
+        if clone_restore is not UNSET:
+            field_dict["cloneRestore"] = clone_restore
         if externalid is not UNSET:
             field_dict["externalid"] = externalid
         if name is not UNSET:
             field_dict["name"] = name
+        if optional_data is not UNSET:
+            field_dict["optionalData"] = optional_data
         if secret_key is not UNSET:
             field_dict["secretKey"] = secret_key
         if status is not UNSET:
@@ -93,9 +103,13 @@ class ApiStorageUpdate:
 
         caution_threshold = d.pop("cautionThreshold", UNSET)
 
+        clone_restore = d.pop("cloneRestore", UNSET)
+
         externalid = d.pop("externalid", UNSET)
 
         name = d.pop("name", UNSET)
+
+        optional_data = d.pop("optionalData", UNSET)
 
         secret_key = d.pop("secretKey", UNSET)
 
@@ -120,8 +134,10 @@ class ApiStorageUpdate:
             alternate=alternate,
             arn=arn,
             caution_threshold=caution_threshold,
+            clone_restore=clone_restore,
             externalid=externalid,
             name=name,
+            optional_data=optional_data,
             secret_key=secret_key,
             status=status,
             storage_class=storage_class,

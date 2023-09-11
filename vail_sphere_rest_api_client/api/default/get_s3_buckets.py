@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.api_s3_bucket_request import ApiS3BucketRequest
+from ...models.api_cloud_bucket_request import ApiCloudBucketRequest
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import Response
 
@@ -13,7 +13,7 @@ from ...types import Response
 def _get_kwargs(
     *,
     client: Client,
-    json_body: ApiS3BucketRequest,
+    json_body: ApiCloudBucketRequest,
 ) -> Dict[str, Any]:
     url = "{}/sl/api/s3/buckets".format(client.base_url)
 
@@ -64,12 +64,12 @@ def _build_response(
 def sync_detailed(
     *,
     client: Client,
-    json_body: ApiS3BucketRequest,
+    json_body: ApiCloudBucketRequest,
 ) -> Response[Union[List[str], ServerValidationErrorResponse]]:
-    """List all external S3 buckets according to the given parameters
+    """Deprecated S3 bucket listing (use cloud/buckets instead)
 
     Args:
-        json_body (ApiS3BucketRequest):
+        json_body (ApiCloudBucketRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -95,12 +95,12 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
-    json_body: ApiS3BucketRequest,
+    json_body: ApiCloudBucketRequest,
 ) -> Optional[Union[List[str], ServerValidationErrorResponse]]:
-    """List all external S3 buckets according to the given parameters
+    """Deprecated S3 bucket listing (use cloud/buckets instead)
 
     Args:
-        json_body (ApiS3BucketRequest):
+        json_body (ApiCloudBucketRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -119,12 +119,12 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
-    json_body: ApiS3BucketRequest,
+    json_body: ApiCloudBucketRequest,
 ) -> Response[Union[List[str], ServerValidationErrorResponse]]:
-    """List all external S3 buckets according to the given parameters
+    """Deprecated S3 bucket listing (use cloud/buckets instead)
 
     Args:
-        json_body (ApiS3BucketRequest):
+        json_body (ApiCloudBucketRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -148,12 +148,12 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
-    json_body: ApiS3BucketRequest,
+    json_body: ApiCloudBucketRequest,
 ) -> Optional[Union[List[str], ServerValidationErrorResponse]]:
-    """List all external S3 buckets according to the given parameters
+    """Deprecated S3 bucket listing (use cloud/buckets instead)
 
     Args:
-        json_body (ApiS3BucketRequest):
+        json_body (ApiCloudBucketRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
