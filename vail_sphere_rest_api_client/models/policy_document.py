@@ -45,11 +45,11 @@ class PolicyDocument:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any] | List) -> T:
         from ..models.policy_document_statement import PolicyDocumentStatement
 
         d = src_dict.copy()
-        statement = PolicyDocumentStatement.from_dict(d.pop("Statement"))
+        statement = PolicyDocumentStatement.from_object(d.pop("Statement"))
 
         version = d.pop("Version")
 
