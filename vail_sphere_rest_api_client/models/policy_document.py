@@ -26,7 +26,7 @@ class PolicyDocument:
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        statement = self.statement.to_dict()
+        statement = self.statement.to_object()
 
         version = self.version
         id = self.id
