@@ -30,6 +30,8 @@ def _get_kwargs(
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
+    headers["Content-type"] = "application/merge-patch+json"
+
     json_json_body = json_body.to_dict()
 
     return {
