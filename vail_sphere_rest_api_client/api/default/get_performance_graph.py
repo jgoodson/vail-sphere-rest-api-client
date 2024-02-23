@@ -1,35 +1,41 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_performance_dataset import ApiPerformanceDataset
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
+    table: str,
     id: str,
     *,
-    client: Client,
+    length: Union[Unset, str] = UNSET,
+    fields: Union[Unset, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/performance/endpoints/throughput/{id}".format(client.base_url, id=id)
+    params: Dict[str, Any] = {}
 
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    params["length"] = length
 
-    return {
+    params["fields"] = fields
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
+
+    _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": f"/sl/api/performance/{table}/{id}",
+        "params": params,
     }
 
+    return _kwargs
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[List["ApiPerformanceDataset"]]:
+
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[List["ApiPerformanceDataset"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
@@ -45,7 +51,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Lis
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[List["ApiPerformanceDataset"]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[List["ApiPerformanceDataset"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -55,14 +63,20 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Lis
 
 
 def sync_detailed(
+    table: str,
     id: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
+    length: Union[Unset, str] = UNSET,
+    fields: Union[Unset, str] = UNSET,
 ) -> Response[List["ApiPerformanceDataset"]]:
     """Get performance metrics for an endpoint
 
     Args:
+        table (str):
         id (str):
+        length (Union[Unset, str]):
+        fields (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -73,12 +87,13 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
+        table=table,
         id=id,
-        client=client,
+        length=length,
+        fields=fields,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -86,14 +101,20 @@ def sync_detailed(
 
 
 def sync(
+    table: str,
     id: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
+    length: Union[Unset, str] = UNSET,
+    fields: Union[Unset, str] = UNSET,
 ) -> Optional[List["ApiPerformanceDataset"]]:
     """Get performance metrics for an endpoint
 
     Args:
+        table (str):
         id (str):
+        length (Union[Unset, str]):
+        fields (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -104,20 +125,29 @@ def sync(
     """
 
     return sync_detailed(
+        table=table,
         id=id,
         client=client,
+        length=length,
+        fields=fields,
     ).parsed
 
 
 async def asyncio_detailed(
+    table: str,
     id: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
+    length: Union[Unset, str] = UNSET,
+    fields: Union[Unset, str] = UNSET,
 ) -> Response[List["ApiPerformanceDataset"]]:
     """Get performance metrics for an endpoint
 
     Args:
+        table (str):
         id (str):
+        length (Union[Unset, str]):
+        fields (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -128,25 +158,32 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
+        table=table,
         id=id,
-        client=client,
+        length=length,
+        fields=fields,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
+    table: str,
     id: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
+    length: Union[Unset, str] = UNSET,
+    fields: Union[Unset, str] = UNSET,
 ) -> Optional[List["ApiPerformanceDataset"]]:
     """Get performance metrics for an endpoint
 
     Args:
+        table (str):
         id (str):
+        length (Union[Unset, str]):
+        fields (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -158,7 +195,10 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
+            table=table,
             id=id,
             client=client,
+            length=length,
+            fields=fields,
         )
     ).parsed

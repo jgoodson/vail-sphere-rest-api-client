@@ -4,33 +4,23 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_http_proxy_response import ApiHttpProxyResponse
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import Response
 
 
-def _get_kwargs(
-    *,
-    client: Client,
-) -> Dict[str, Any]:
-    url = "{}/sl/api/proxy/global".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
-    return {
+def _get_kwargs() -> Dict[str, Any]:
+    _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "/sl/api/proxy/global",
     }
+
+    return _kwargs
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[ApiHttpProxyResponse, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ApiHttpProxyResponse.from_dict(response.json())
@@ -47,7 +37,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[ApiHttpProxyResponse, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -59,7 +49,7 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[ApiHttpProxyResponse, ServerValidationErrorResponse]]:
     """Get the global network proxy configuration
 
@@ -71,12 +61,9 @@ def sync_detailed(
         Response[Union[ApiHttpProxyResponse, ServerValidationErrorResponse]]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -85,7 +72,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[ApiHttpProxyResponse, ServerValidationErrorResponse]]:
     """Get the global network proxy configuration
 
@@ -104,7 +91,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[ApiHttpProxyResponse, ServerValidationErrorResponse]]:
     """Get the global network proxy configuration
 
@@ -116,19 +103,16 @@ async def asyncio_detailed(
         Response[Union[ApiHttpProxyResponse, ServerValidationErrorResponse]]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[ApiHttpProxyResponse, ServerValidationErrorResponse]]:
     """Get the global network proxy configuration
 

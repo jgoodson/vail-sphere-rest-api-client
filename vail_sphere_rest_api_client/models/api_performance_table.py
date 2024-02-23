@@ -1,32 +1,34 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="ApiBlackPearlCredentials")
+T = TypeVar("T", bound="ApiPerformanceTable")
 
 
-@attr.s(auto_attribs=True)
-class ApiBlackPearlCredentials:
+@_attrs_define
+class ApiPerformanceTable:
     """
     Attributes:
-        access_key (str): BlackPearl user's S3 Access ID
-        secret_key (str): BlackPearl user's S3 Secret Key
+        name (str): Performance table name
+        title (str): Descriptive title
     """
 
-    access_key: str
-    secret_key: str
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    name: str
+    title: str
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        access_key = self.access_key
-        secret_key = self.secret_key
+        name = self.name
+
+        title = self.title
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "accessKey": access_key,
-                "secretKey": secret_key,
+                "name": name,
+                "title": title,
             }
         )
 
@@ -35,17 +37,17 @@ class ApiBlackPearlCredentials:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        access_key = d.pop("accessKey")
+        name = d.pop("name")
 
-        secret_key = d.pop("secretKey")
+        title = d.pop("title")
 
-        api_black_pearl_credentials = cls(
-            access_key=access_key,
-            secret_key=secret_key,
+        api_performance_table = cls(
+            name=name,
+            title=title,
         )
 
-        api_black_pearl_credentials.additional_properties = d
-        return api_black_pearl_credentials
+        api_performance_table.additional_properties = d
+        return api_performance_table
 
     @property
     def additional_keys(self) -> List[str]:

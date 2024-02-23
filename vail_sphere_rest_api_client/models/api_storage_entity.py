@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.api_storage_entity_storage_class import ApiStorageEntityStorageClass
 from ..types import UNSET, Unset
@@ -8,25 +9,30 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="ApiStorageEntity")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiStorageEntity:
     """
     Attributes:
         id (str): Storage ID
         storage_class (ApiStorageEntityStorageClass): Storage class
         data (Union[Unset, int]): Portion of physical media used by this storage for object data
+        optional (Union[Unset, int]): Portion of physical media used by this storage for cached data
     """
 
     id: str
     storage_class: ApiStorageEntityStorageClass
     data: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    optional: Union[Unset, int] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id
+
         storage_class = self.storage_class.value
 
         data = self.data
+
+        optional = self.optional
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -38,6 +44,8 @@ class ApiStorageEntity:
         )
         if data is not UNSET:
             field_dict["data"] = data
+        if optional is not UNSET:
+            field_dict["optional"] = optional
 
         return field_dict
 
@@ -50,10 +58,13 @@ class ApiStorageEntity:
 
         data = d.pop("data", UNSET)
 
+        optional = d.pop("optional", UNSET)
+
         api_storage_entity = cls(
             id=id,
             storage_class=storage_class,
             data=data,
+            optional=optional,
         )
 
         api_storage_entity.additional_properties = d

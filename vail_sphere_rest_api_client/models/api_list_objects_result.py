@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiListObjectsResult")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiListObjectsResult:
     """
     Attributes:
@@ -43,17 +44,18 @@ class ApiListObjectsResult:
     prefix: Union[Unset, str] = UNSET
     version_id_marker: Union[Unset, str] = UNSET
     versions: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         max_keys = self.max_keys
+
         name = self.name
+
         common_prefixes: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.common_prefixes, Unset):
             common_prefixes = []
             for common_prefixes_item_data in self.common_prefixes:
                 common_prefixes_item = common_prefixes_item_data.to_dict()
-
                 common_prefixes.append(common_prefixes_item)
 
         contents: Union[Unset, List[Dict[str, Any]]] = UNSET
@@ -61,16 +63,22 @@ class ApiListObjectsResult:
             contents = []
             for contents_item_data in self.contents:
                 contents_item = contents_item_data.to_dict()
-
                 contents.append(contents_item)
 
         delimiter = self.delimiter
+
         is_truncated = self.is_truncated
+
         marker = self.marker
+
         next_marker = self.next_marker
+
         next_version_id_marker = self.next_version_id_marker
+
         prefix = self.prefix
+
         version_id_marker = self.version_id_marker
+
         versions = self.versions
 
         field_dict: Dict[str, Any] = {}

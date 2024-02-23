@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.api_storage_update_status import ApiStorageUpdateStatus
 from ..models.api_storage_update_storage_class import ApiStorageUpdateStorageClass
@@ -9,7 +10,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="ApiStorageUpdate")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiStorageUpdate:
     """
     Attributes:
@@ -40,18 +41,27 @@ class ApiStorageUpdate:
     status: Union[Unset, ApiStorageUpdateStatus] = UNSET
     storage_class: Union[Unset, ApiStorageUpdateStorageClass] = UNSET
     warning_threshold: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         access_key = self.access_key
+
         alternate = self.alternate
+
         arn = self.arn
+
         caution_threshold = self.caution_threshold
+
         clone_restore = self.clone_restore
+
         externalid = self.externalid
+
         name = self.name
+
         optional_data = self.optional_data
+
         secret_key = self.secret_key
+
         status: Union[Unset, str] = UNSET
         if not isinstance(self.status, Unset):
             status = self.status.value

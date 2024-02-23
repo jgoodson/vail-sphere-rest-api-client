@@ -1,34 +1,26 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_bucket import ApiBucket
 from ...types import Response
 
 
-def _get_kwargs(
-    *,
-    client: Client,
-) -> Dict[str, Any]:
-    url = "{}/sl/api/buckets".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
-    return {
+def _get_kwargs() -> Dict[str, Any]:
+    _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "/sl/api/buckets",
     }
 
+    return _kwargs
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[List["ApiBucket"]]:
+
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[List["ApiBucket"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
@@ -44,7 +36,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Lis
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[List["ApiBucket"]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[List["ApiBucket"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -55,7 +49,7 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Lis
 
 def sync_detailed(
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Response[List["ApiBucket"]]:
     """List all buckets
 
@@ -67,12 +61,9 @@ def sync_detailed(
         Response[List['ApiBucket']]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -81,7 +72,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Optional[List["ApiBucket"]]:
     """List all buckets
 
@@ -100,7 +91,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Response[List["ApiBucket"]]:
     """List all buckets
 
@@ -112,19 +103,16 @@ async def asyncio_detailed(
         Response[List['ApiBucket']]
     """
 
-    kwargs = _get_kwargs(
-        client=client,
-    )
+    kwargs = _get_kwargs()
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Optional[List["ApiBucket"]]:
     """List all buckets
 

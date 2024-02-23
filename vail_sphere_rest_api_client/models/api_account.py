@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ApiAccount")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiAccount:
     """
     Attributes:
@@ -15,9 +16,9 @@ class ApiAccount:
         default (Union[Unset, bool]): True if this is the default bucket owner account
         description (Union[Unset, str]): The AWS Account's description.
         email (Union[Unset, str]): The user's email associated with the AWS Account.
-        external_id (Union[Unset, str]): External ID
+        external_id (Union[Unset, str]): AWS role external ID
         id (Union[Unset, str]): AWS account ID
-        role_arn (Union[Unset, str]): AWS Role ARN
+        role_arn (Union[Unset, str]): AWS role ARN
         username (Union[Unset, str]): The user's name associated with the AWS Account.
     """
 
@@ -29,16 +30,23 @@ class ApiAccount:
     id: Union[Unset, str] = UNSET
     role_arn: Union[Unset, str] = UNSET
     username: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         canonical_id = self.canonical_id
+
         default = self.default
+
         description = self.description
+
         email = self.email
+
         external_id = self.external_id
+
         id = self.id
+
         role_arn = self.role_arn
+
         username = self.username
 
         field_dict: Dict[str, Any] = {}

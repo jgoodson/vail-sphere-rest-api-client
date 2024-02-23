@@ -1,7 +1,8 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..models.api_message_severity import ApiMessageSeverity
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiMessage")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiMessage:
     """
     Attributes:
@@ -34,19 +35,23 @@ class ApiMessage:
     params: Union[Unset, "ApiMessageParams"] = UNSET
     read: Union[Unset, bool] = UNSET
     time: Union[Unset, datetime.datetime] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         severity = self.severity.value
 
         text = self.text
+
         id = self.id
+
         key = self.key
+
         params: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.params, Unset):
             params = self.params.to_dict()
 
         read = self.read
+
         time: Union[Unset, str] = UNSET
         if not isinstance(self.time, Unset):
             time = self.time.isoformat()

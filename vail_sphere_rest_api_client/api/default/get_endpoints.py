@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_endpoint import ApiEndpoint
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import UNSET, Response, Unset
@@ -12,32 +12,25 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    client: Client,
-    type: Union[Unset, None, str] = UNSET,
+    type: Union[Unset, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/endpoints".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
     params: Dict[str, Any] = {}
+
     params["type"] = type
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "/sl/api/endpoints",
         "params": params,
     }
 
+    return _kwargs
+
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[List["ApiEndpoint"], ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
@@ -59,7 +52,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[List["ApiEndpoint"], ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -71,13 +64,13 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
-    type: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    type: Union[Unset, str] = UNSET,
 ) -> Response[Union[List["ApiEndpoint"], ServerValidationErrorResponse]]:
     """List endpoints
 
     Args:
-        type (Union[Unset, None, str]):
+        type (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -88,12 +81,10 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         type=type,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -102,13 +93,13 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
-    type: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    type: Union[Unset, str] = UNSET,
 ) -> Optional[Union[List["ApiEndpoint"], ServerValidationErrorResponse]]:
     """List endpoints
 
     Args:
-        type (Union[Unset, None, str]):
+        type (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -126,13 +117,13 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
-    type: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    type: Union[Unset, str] = UNSET,
 ) -> Response[Union[List["ApiEndpoint"], ServerValidationErrorResponse]]:
     """List endpoints
 
     Args:
-        type (Union[Unset, None, str]):
+        type (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -143,25 +134,23 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         type=type,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
-    type: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    type: Union[Unset, str] = UNSET,
 ) -> Optional[Union[List["ApiEndpoint"], ServerValidationErrorResponse]]:
     """List endpoints
 
     Args:
-        type (Union[Unset, None, str]):
+        type (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

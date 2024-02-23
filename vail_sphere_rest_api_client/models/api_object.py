@@ -1,7 +1,8 @@
 import datetime
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..models.api_object_storage_class import ApiObjectStorageClass
@@ -10,7 +11,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="ApiObject")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiObject:
     """
     Attributes:
@@ -45,19 +46,27 @@ class ApiObject:
     size: Union[Unset, int] = UNSET
     storage_class: Union[Unset, ApiObjectStorageClass] = UNSET
     version_id: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         key = self.key
+
         last_modified = self.last_modified.isoformat()
 
         etag = self.etag
+
         is_compliance = self.is_compliance
+
         is_delete = self.is_delete
+
         is_latest = self.is_latest
+
         legal_hold = self.legal_hold
+
         owner_id = self.owner_id
+
         owner_name = self.owner_name
+
         restored_until: Union[Unset, str] = UNSET
         if not isinstance(self.restored_until, Unset):
             restored_until = self.restored_until.isoformat()
@@ -67,6 +76,7 @@ class ApiObject:
             retain_until = self.retain_until.isoformat()
 
         size = self.size
+
         storage_class: Union[Unset, str] = UNSET
         if not isinstance(self.storage_class, Unset):
             storage_class = self.storage_class.value

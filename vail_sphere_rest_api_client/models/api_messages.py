@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
+from ..models.api_messages_max_unread_severity import ApiMessagesMaxUnreadSeverity
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -11,7 +13,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiMessages")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiMessages:
     """
     Attributes:
@@ -20,6 +22,7 @@ class ApiMessages:
         is_truncated (Union[Unset, bool]): Returns true if list was truncated
         marker (Union[Unset, str]): The marker specified in the request
         max_keys (Union[Unset, int]): The maximum number of keys specified in the request
+        max_unread_severity (Union[Unset, ApiMessagesMaxUnreadSeverity]): The maximum severity of the unread messages
         next_marker (Union[Unset, str]): The starting ID of the next page
     """
 
@@ -28,20 +31,28 @@ class ApiMessages:
     is_truncated: Union[Unset, bool] = UNSET
     marker: Union[Unset, str] = UNSET
     max_keys: Union[Unset, int] = UNSET
+    max_unread_severity: Union[Unset, ApiMessagesMaxUnreadSeverity] = UNSET
     next_marker: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         unread_count = self.unread_count
+
         data = []
         for data_item_data in self.data:
             data_item = data_item_data.to_dict()
-
             data.append(data_item)
 
         is_truncated = self.is_truncated
+
         marker = self.marker
+
         max_keys = self.max_keys
+
+        max_unread_severity: Union[Unset, str] = UNSET
+        if not isinstance(self.max_unread_severity, Unset):
+            max_unread_severity = self.max_unread_severity.value
+
         next_marker = self.next_marker
 
         field_dict: Dict[str, Any] = {}
@@ -58,6 +69,8 @@ class ApiMessages:
             field_dict["marker"] = marker
         if max_keys is not UNSET:
             field_dict["maxKeys"] = max_keys
+        if max_unread_severity is not UNSET:
+            field_dict["maxUnreadSeverity"] = max_unread_severity
         if next_marker is not UNSET:
             field_dict["nextMarker"] = next_marker
 
@@ -83,6 +96,13 @@ class ApiMessages:
 
         max_keys = d.pop("maxKeys", UNSET)
 
+        _max_unread_severity = d.pop("maxUnreadSeverity", UNSET)
+        max_unread_severity: Union[Unset, ApiMessagesMaxUnreadSeverity]
+        if isinstance(_max_unread_severity, Unset):
+            max_unread_severity = UNSET
+        else:
+            max_unread_severity = ApiMessagesMaxUnreadSeverity(_max_unread_severity)
+
         next_marker = d.pop("nextMarker", UNSET)
 
         api_messages = cls(
@@ -91,6 +111,7 @@ class ApiMessages:
             is_truncated=is_truncated,
             marker=marker,
             max_keys=max_keys,
+            max_unread_severity=max_unread_severity,
             next_marker=next_marker,
         )
 

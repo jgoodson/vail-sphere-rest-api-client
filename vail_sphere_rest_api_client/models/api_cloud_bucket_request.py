@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.api_cloud_bucket_request_cloud_provider import ApiCloudBucketRequestCloudProvider
 from ..types import UNSET, Unset
@@ -8,7 +9,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="ApiCloudBucketRequest")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiCloudBucketRequest:
     """
     Attributes:
@@ -31,19 +32,25 @@ class ApiCloudBucketRequest:
     region: Union[Unset, str] = UNSET
     secret_key: Union[Unset, str] = UNSET
     url: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         access_key = self.access_key
+
         arn = self.arn
+
         cloud_provider: Union[Unset, str] = UNSET
         if not isinstance(self.cloud_provider, Unset):
             cloud_provider = self.cloud_provider.value
 
         credentials = self.credentials
+
         externalid = self.externalid
+
         region = self.region
+
         secret_key = self.secret_key
+
         url = self.url
 
         field_dict: Dict[str, Any] = {}

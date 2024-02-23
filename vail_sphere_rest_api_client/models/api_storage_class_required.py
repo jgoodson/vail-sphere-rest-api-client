@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.api_storage_class_required_storage_class import ApiStorageClassRequiredStorageClass
 
 T = TypeVar("T", bound="ApiStorageClassRequired")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiStorageClassRequired:
     """
     Attributes:
@@ -15,7 +16,7 @@ class ApiStorageClassRequired:
     """
 
     storage_class: ApiStorageClassRequiredStorageClass
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         storage_class = self.storage_class.value

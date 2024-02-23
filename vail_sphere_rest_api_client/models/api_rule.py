@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.api_rule_apply import ApiRuleApply
 from ..types import UNSET, Unset
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiRule")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiRule:
     """
     Attributes:
@@ -38,23 +39,29 @@ class ApiRule:
     include: Union[Unset, str] = UNSET
     noncurrent_versions: Union[Unset, int] = UNSET
     schedule: Union[Unset, "ApiRuleSchedule"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         name = self.name
+
         apply: Union[Unset, str] = UNSET
         if not isinstance(self.apply, Unset):
             apply = self.apply.value
 
         deletion = self.deletion
+
         destinations: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.destinations, Unset):
             destinations = self.destinations.to_dict()
 
         exclude = self.exclude
+
         expiration = self.expiration
+
         include = self.include
+
         noncurrent_versions = self.noncurrent_versions
+
         schedule: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.schedule, Unset):
             schedule = self.schedule.to_dict()

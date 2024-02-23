@@ -1,13 +1,14 @@
 import datetime
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 T = TypeVar("T", bound="ApiCertificate")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiCertificate:
     """
     Attributes:
@@ -21,10 +22,11 @@ class ApiCertificate:
     not_after: datetime.datetime
     not_before: datetime.datetime
     subject: str
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         issuer = self.issuer
+
         not_after = self.not_after.isoformat()
 
         not_before = self.not_before.isoformat()

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.api_key_credentials import ApiKeyCredentials
@@ -9,7 +10,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiNodeCredentials")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiNodeCredentials:
     """
     Attributes:
@@ -23,13 +24,15 @@ class ApiNodeCredentials:
     nodekey: str
     nodesecret: str
     nonce: str
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         key_credentials = self.key_credentials.to_dict()
 
         nodekey = self.nodekey
+
         nodesecret = self.nodesecret
+
         nonce = self.nonce
 
         field_dict: Dict[str, Any] = {}

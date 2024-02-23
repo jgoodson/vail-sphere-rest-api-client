@@ -1,36 +1,37 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
-    from ..models.api_performance_data_point import ApiPerformanceDataPoint
+    from ..models.tseries_data_point import TseriesDataPoint
 
 
 T = TypeVar("T", bound="ApiPerformanceDataset")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiPerformanceDataset:
     """
     Attributes:
-        data (List['ApiPerformanceDataPoint']): Performance metric data
+        data (List['TseriesDataPoint']): Performance metric data
         label (str): Performance dataset label
         unit (str): Performance dataset data unit
     """
 
-    data: List["ApiPerformanceDataPoint"]
+    data: List["TseriesDataPoint"]
     label: str
     unit: str
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         data = []
         for data_item_data in self.data:
             data_item = data_item_data.to_dict()
-
             data.append(data_item)
 
         label = self.label
+
         unit = self.unit
 
         field_dict: Dict[str, Any] = {}
@@ -47,13 +48,13 @@ class ApiPerformanceDataset:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.api_performance_data_point import ApiPerformanceDataPoint
+        from ..models.tseries_data_point import TseriesDataPoint
 
         d = src_dict.copy()
         data = []
         _data = d.pop("data")
         for data_item_data in _data:
-            data_item = ApiPerformanceDataPoint.from_dict(data_item_data)
+            data_item = TseriesDataPoint.from_dict(data_item_data)
 
             data.append(data_item)
 

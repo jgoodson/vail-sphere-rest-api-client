@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="RestCredentials")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class RestCredentials:
     """
     Attributes:
@@ -19,6 +20,8 @@ class RestCredentials:
         challenge_name (Union[Unset, str]): The challenge to pass.
         challenge_responses (Union[Unset, RestCredentialsChallengeResponses]): The responses for the given challenge.
             This is required when challengeName is supplied.
+        otp (Union[Unset, str]): One-time password for multi-factor authentication. This is only used for backends that
+            don't support MFA challenges (e.g. BlackPearl)'.
         password (Union[Unset, str]): The password for the user.  This is only required when initially trying to create
             a token and not when responding to a challenge.
         session (Union[Unset, str]): The session ID used to pass the challenge.  This is required when challengeName is
@@ -28,18 +31,24 @@ class RestCredentials:
     username: str
     challenge_name: Union[Unset, str] = UNSET
     challenge_responses: Union[Unset, "RestCredentialsChallengeResponses"] = UNSET
+    otp: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     session: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         username = self.username
+
         challenge_name = self.challenge_name
+
         challenge_responses: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.challenge_responses, Unset):
             challenge_responses = self.challenge_responses.to_dict()
 
+        otp = self.otp
+
         password = self.password
+
         session = self.session
 
         field_dict: Dict[str, Any] = {}
@@ -53,6 +62,8 @@ class RestCredentials:
             field_dict["challengeName"] = challenge_name
         if challenge_responses is not UNSET:
             field_dict["challengeResponses"] = challenge_responses
+        if otp is not UNSET:
+            field_dict["otp"] = otp
         if password is not UNSET:
             field_dict["password"] = password
         if session is not UNSET:
@@ -76,6 +87,8 @@ class RestCredentials:
         else:
             challenge_responses = RestCredentialsChallengeResponses.from_dict(_challenge_responses)
 
+        otp = d.pop("otp", UNSET)
+
         password = d.pop("password", UNSET)
 
         session = d.pop("session", UNSET)
@@ -84,6 +97,7 @@ class RestCredentials:
             username=username,
             challenge_name=challenge_name,
             challenge_responses=challenge_responses,
+            otp=otp,
             password=password,
             session=session,
         )

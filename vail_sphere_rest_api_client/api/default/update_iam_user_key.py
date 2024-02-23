@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_iam_user_key import ApiIAMUserKey
 from ...models.api_iam_user_key_update import ApiIAMUserKeyUpdate
 from ...models.server_validation_error_response import ServerValidationErrorResponse
@@ -16,33 +16,26 @@ def _get_kwargs(
     username: str,
     id: str,
     *,
-    client: Client,
-    json_body: ApiIAMUserKeyUpdate,
+    body: ApiIAMUserKeyUpdate,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/iam/users/{account}/{username}/keys/{id}".format(
-        client.base_url, account=account, username=username, id=id
-    )
+    headers: Dict[str, Any] = {}
 
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-    
-    headers["Content-type"] = "application/merge-patch+json"
-
-    json_json_body = json_body.to_dict()
-
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "patch",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
-        "json": json_json_body,
+        "url": f"/sl/api/iam/users/{account}/{username}/keys/{id}",
     }
+
+    _body = body.to_dict()
+
+    _kwargs["json"] = _body
+    headers["Content-Type"] = "application/merge-patch+json"
+
+    _kwargs["headers"] = headers
+    return _kwargs
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[ApiIAMUserKey, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ApiIAMUserKey.from_dict(response.json())
@@ -63,7 +56,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[ApiIAMUserKey, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -78,8 +71,8 @@ def sync_detailed(
     username: str,
     id: str,
     *,
-    client: Client,
-    json_body: ApiIAMUserKeyUpdate,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiIAMUserKeyUpdate,
 ) -> Response[Union[ApiIAMUserKey, ServerValidationErrorResponse]]:
     """Modify an IAM key
 
@@ -87,7 +80,7 @@ def sync_detailed(
         account (str):
         username (str):
         id (str):
-        json_body (ApiIAMUserKeyUpdate):
+        body (ApiIAMUserKeyUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -101,12 +94,10 @@ def sync_detailed(
         account=account,
         username=username,
         id=id,
-        client=client,
-        json_body=json_body,
+        body=body,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -118,8 +109,8 @@ def sync(
     username: str,
     id: str,
     *,
-    client: Client,
-    json_body: ApiIAMUserKeyUpdate,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiIAMUserKeyUpdate,
 ) -> Optional[Union[ApiIAMUserKey, ServerValidationErrorResponse]]:
     """Modify an IAM key
 
@@ -127,7 +118,7 @@ def sync(
         account (str):
         username (str):
         id (str):
-        json_body (ApiIAMUserKeyUpdate):
+        body (ApiIAMUserKeyUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -142,7 +133,7 @@ def sync(
         username=username,
         id=id,
         client=client,
-        json_body=json_body,
+        body=body,
     ).parsed
 
 
@@ -151,8 +142,8 @@ async def asyncio_detailed(
     username: str,
     id: str,
     *,
-    client: Client,
-    json_body: ApiIAMUserKeyUpdate,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiIAMUserKeyUpdate,
 ) -> Response[Union[ApiIAMUserKey, ServerValidationErrorResponse]]:
     """Modify an IAM key
 
@@ -160,7 +151,7 @@ async def asyncio_detailed(
         account (str):
         username (str):
         id (str):
-        json_body (ApiIAMUserKeyUpdate):
+        body (ApiIAMUserKeyUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -174,12 +165,10 @@ async def asyncio_detailed(
         account=account,
         username=username,
         id=id,
-        client=client,
-        json_body=json_body,
+        body=body,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -189,8 +178,8 @@ async def asyncio(
     username: str,
     id: str,
     *,
-    client: Client,
-    json_body: ApiIAMUserKeyUpdate,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiIAMUserKeyUpdate,
 ) -> Optional[Union[ApiIAMUserKey, ServerValidationErrorResponse]]:
     """Modify an IAM key
 
@@ -198,7 +187,7 @@ async def asyncio(
         account (str):
         username (str):
         id (str):
-        json_body (ApiIAMUserKeyUpdate):
+        body (ApiIAMUserKeyUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -214,6 +203,6 @@ async def asyncio(
             username=username,
             id=id,
             client=client,
-            json_body=json_body,
+            body=body,
         )
     ).parsed

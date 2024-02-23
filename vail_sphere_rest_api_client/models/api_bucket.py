@@ -1,7 +1,8 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..models.api_bucket_control import ApiBucketControl
@@ -10,14 +11,14 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.api_acl import ApiACL
+    from ..models.api_policy import ApiPolicy
     from ..models.api_retention import ApiRetention
-    from ..models.policy_document import PolicyDocument
 
 
 T = TypeVar("T", bound="ApiBucket")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiBucket:
     """
     Attributes:
@@ -38,7 +39,7 @@ class ApiBucket:
         linked_storage (Union[Unset, str]): Cloud or BlackPearl storage to use for linking
         locking (Union[Unset, bool]): True if object locking is enabled
         owner (Union[Unset, str]): The bucket's owner
-        policy (Union[Unset, PolicyDocument]):
+        policy (Union[Unset, ApiPolicy]):
         restore (Union[Unset, bool]): True if automatic restore is enabled
         restrict_public_buckets (Union[Unset, bool]): True if public policies for this bucket are restricted
         versioning (Union[Unset, ApiBucketVersioning]): Bucket versioning status
@@ -58,27 +59,30 @@ class ApiBucket:
     linked_storage: Union[Unset, str] = UNSET
     locking: Union[Unset, bool] = UNSET
     owner: Union[Unset, str] = UNSET
-    policy: Union[Unset, "PolicyDocument"] = UNSET
+    policy: Union[Unset, "ApiPolicy"] = UNSET
     restore: Union[Unset, bool] = UNSET
     restrict_public_buckets: Union[Unset, bool] = UNSET
     versioning: Union[Unset, ApiBucketVersioning] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         created = self.created.isoformat()
 
         name = self.name
+
         acls: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.acls, Unset):
             acls = []
             for acls_item_data in self.acls:
                 acls_item = acls_item_data.to_dict()
-
                 acls.append(acls_item)
 
         block_public_acls = self.block_public_acls
+
         block_public_policy = self.block_public_policy
+
         compress = self.compress
+
         control: Union[Unset, str] = UNSET
         if not isinstance(self.control, Unset):
             control = self.control.value
@@ -88,17 +92,25 @@ class ApiBucket:
             default_retention = self.default_retention.to_dict()
 
         encrypt = self.encrypt
+
         ignore_public_acls = self.ignore_public_acls
+
         lifecycle = self.lifecycle
+
         linked_storage = self.linked_storage
+
         locking = self.locking
+
         owner = self.owner
+
         policy: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.policy, Unset):
             policy = self.policy.to_dict()
 
         restore = self.restore
+
         restrict_public_buckets = self.restrict_public_buckets
+
         versioning: Union[Unset, str] = UNSET
         if not isinstance(self.versioning, Unset):
             versioning = self.versioning.value
@@ -149,8 +161,8 @@ class ApiBucket:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.api_acl import ApiACL
+        from ..models.api_policy import ApiPolicy
         from ..models.api_retention import ApiRetention
-        from ..models.policy_document import PolicyDocument
 
         d = src_dict.copy()
         created = isoparse(d.pop("created"))
@@ -197,11 +209,11 @@ class ApiBucket:
         owner = d.pop("owner", UNSET)
 
         _policy = d.pop("policy", UNSET)
-        policy: Union[Unset, PolicyDocument]
+        policy: Union[Unset, ApiPolicy]
         if isinstance(_policy, Unset):
             policy = UNSET
         else:
-            policy = PolicyDocument.from_dict(_policy)
+            policy = ApiPolicy.from_dict(_policy)
 
         restore = d.pop("restore", UNSET)
 
