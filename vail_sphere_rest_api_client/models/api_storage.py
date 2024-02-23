@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.api_storage_cloud_provider import ApiStorageCloudProvider
 from ..models.api_storage_status import ApiStorageStatus
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiStorage")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiStorage:
     """
     Attributes:
@@ -24,6 +25,7 @@ class ApiStorage:
         name (str): Storage name
         type (ApiStorageType): Storage type
         alternate (Union[Unset, str]): ID of alternate storage to move clones to during delete
+        archival (Union[Unset, bool]): Restore may be required to access data
         bucket (Union[Unset, str]): The external bucket to write too
         bucket_owner (Union[Unset, ApiBucketOwner]):
         caution_threshold (Union[Unset, int]): Caution threshold capacity for the storage
@@ -47,6 +49,7 @@ class ApiStorage:
     name: str
     type: ApiStorageType
     alternate: Union[Unset, str] = UNSET
+    archival: Union[Unset, bool] = UNSET
     bucket: Union[Unset, str] = UNSET
     bucket_owner: Union[Unset, "ApiBucketOwner"] = UNSET
     caution_threshold: Union[Unset, int] = UNSET
@@ -63,32 +66,47 @@ class ApiStorage:
     url: Union[Unset, str] = UNSET
     verification_running: Union[Unset, bool] = UNSET
     warning_threshold: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         endpoint = self.endpoint
+
         id = self.id
+
         name = self.name
+
         type = self.type.value
 
         alternate = self.alternate
+
+        archival = self.archival
+
         bucket = self.bucket
+
         bucket_owner: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.bucket_owner, Unset):
             bucket_owner = self.bucket_owner.to_dict()
 
         caution_threshold = self.caution_threshold
+
         clone_restore = self.clone_restore
+
         cloud_provider: Union[Unset, str] = UNSET
         if not isinstance(self.cloud_provider, Unset):
             cloud_provider = self.cloud_provider.value
 
         empty = self.empty
+
         link = self.link
+
         oldest = self.oldest
+
         optional_data = self.optional_data
+
         read_only = self.read_only
+
         region = self.region
+
         status: Union[Unset, str] = UNSET
         if not isinstance(self.status, Unset):
             status = self.status.value
@@ -98,7 +116,9 @@ class ApiStorage:
             storage_class = self.storage_class.value
 
         url = self.url
+
         verification_running = self.verification_running
+
         warning_threshold = self.warning_threshold
 
         field_dict: Dict[str, Any] = {}
@@ -113,6 +133,8 @@ class ApiStorage:
         )
         if alternate is not UNSET:
             field_dict["alternate"] = alternate
+        if archival is not UNSET:
+            field_dict["archival"] = archival
         if bucket is not UNSET:
             field_dict["bucket"] = bucket
         if bucket_owner is not UNSET:
@@ -162,6 +184,8 @@ class ApiStorage:
         type = ApiStorageType(d.pop("type"))
 
         alternate = d.pop("alternate", UNSET)
+
+        archival = d.pop("archival", UNSET)
 
         bucket = d.pop("bucket", UNSET)
 
@@ -221,6 +245,7 @@ class ApiStorage:
             name=name,
             type=type,
             alternate=alternate,
+            archival=archival,
             bucket=bucket,
             bucket_owner=bucket_owner,
             caution_threshold=caution_threshold,

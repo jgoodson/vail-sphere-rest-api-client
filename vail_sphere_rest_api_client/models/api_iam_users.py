@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.api_iam_user import ApiIAMUser
@@ -9,7 +10,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiIAMUsers")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiIAMUsers:
     """
     Attributes:
@@ -17,13 +18,12 @@ class ApiIAMUsers:
     """
 
     data: List["ApiIAMUser"]
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         data = []
         for data_item_data in self.data:
             data_item = data_item_data.to_dict()
-
             data.append(data_item)
 
         field_dict: Dict[str, Any] = {}

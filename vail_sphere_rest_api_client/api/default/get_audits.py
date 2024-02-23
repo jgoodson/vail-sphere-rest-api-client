@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_audits import ApiAudits
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import UNSET, Response, Unset
@@ -13,31 +13,24 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    client: Client,
-    username: Union[Unset, None, str] = UNSET,
-    start: Union[Unset, None, datetime.datetime] = UNSET,
-    end: Union[Unset, None, datetime.datetime] = UNSET,
-    marker: Union[Unset, None, str] = UNSET,
-    max_keys: Union[Unset, None, int] = UNSET,
+    username: Union[Unset, str] = UNSET,
+    start: Union[Unset, datetime.datetime] = UNSET,
+    end: Union[Unset, datetime.datetime] = UNSET,
+    marker: Union[Unset, str] = UNSET,
+    max_keys: Union[Unset, int] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/reports/audit".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
     params: Dict[str, Any] = {}
+
     params["username"] = username
 
-    json_start: Union[Unset, None, str] = UNSET
+    json_start: Union[Unset, str] = UNSET
     if not isinstance(start, Unset):
-        json_start = start.isoformat() if start else None
-
+        json_start = start.isoformat()
     params["start"] = json_start
 
-    json_end: Union[Unset, None, str] = UNSET
+    json_end: Union[Unset, str] = UNSET
     if not isinstance(end, Unset):
-        json_end = end.isoformat() if end else None
-
+        json_end = end.isoformat()
     params["end"] = json_end
 
     params["marker"] = marker
@@ -46,19 +39,17 @@ def _get_kwargs(
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "/sl/api/reports/audit",
         "params": params,
     }
 
+    return _kwargs
+
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[ApiAudits, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ApiAudits.from_dict(response.json())
@@ -75,7 +66,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[ApiAudits, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -87,21 +78,21 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
-    username: Union[Unset, None, str] = UNSET,
-    start: Union[Unset, None, datetime.datetime] = UNSET,
-    end: Union[Unset, None, datetime.datetime] = UNSET,
-    marker: Union[Unset, None, str] = UNSET,
-    max_keys: Union[Unset, None, int] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    username: Union[Unset, str] = UNSET,
+    start: Union[Unset, datetime.datetime] = UNSET,
+    end: Union[Unset, datetime.datetime] = UNSET,
+    marker: Union[Unset, str] = UNSET,
+    max_keys: Union[Unset, int] = UNSET,
 ) -> Response[Union[ApiAudits, ServerValidationErrorResponse]]:
     """Get audit log data
 
     Args:
-        username (Union[Unset, None, str]):
-        start (Union[Unset, None, datetime.datetime]):
-        end (Union[Unset, None, datetime.datetime]):
-        marker (Union[Unset, None, str]):
-        max_keys (Union[Unset, None, int]):
+        username (Union[Unset, str]):
+        start (Union[Unset, datetime.datetime]):
+        end (Union[Unset, datetime.datetime]):
+        marker (Union[Unset, str]):
+        max_keys (Union[Unset, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -112,7 +103,6 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         username=username,
         start=start,
         end=end,
@@ -120,8 +110,7 @@ def sync_detailed(
         max_keys=max_keys,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -130,21 +119,21 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
-    username: Union[Unset, None, str] = UNSET,
-    start: Union[Unset, None, datetime.datetime] = UNSET,
-    end: Union[Unset, None, datetime.datetime] = UNSET,
-    marker: Union[Unset, None, str] = UNSET,
-    max_keys: Union[Unset, None, int] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    username: Union[Unset, str] = UNSET,
+    start: Union[Unset, datetime.datetime] = UNSET,
+    end: Union[Unset, datetime.datetime] = UNSET,
+    marker: Union[Unset, str] = UNSET,
+    max_keys: Union[Unset, int] = UNSET,
 ) -> Optional[Union[ApiAudits, ServerValidationErrorResponse]]:
     """Get audit log data
 
     Args:
-        username (Union[Unset, None, str]):
-        start (Union[Unset, None, datetime.datetime]):
-        end (Union[Unset, None, datetime.datetime]):
-        marker (Union[Unset, None, str]):
-        max_keys (Union[Unset, None, int]):
+        username (Union[Unset, str]):
+        start (Union[Unset, datetime.datetime]):
+        end (Union[Unset, datetime.datetime]):
+        marker (Union[Unset, str]):
+        max_keys (Union[Unset, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -166,21 +155,21 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
-    username: Union[Unset, None, str] = UNSET,
-    start: Union[Unset, None, datetime.datetime] = UNSET,
-    end: Union[Unset, None, datetime.datetime] = UNSET,
-    marker: Union[Unset, None, str] = UNSET,
-    max_keys: Union[Unset, None, int] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    username: Union[Unset, str] = UNSET,
+    start: Union[Unset, datetime.datetime] = UNSET,
+    end: Union[Unset, datetime.datetime] = UNSET,
+    marker: Union[Unset, str] = UNSET,
+    max_keys: Union[Unset, int] = UNSET,
 ) -> Response[Union[ApiAudits, ServerValidationErrorResponse]]:
     """Get audit log data
 
     Args:
-        username (Union[Unset, None, str]):
-        start (Union[Unset, None, datetime.datetime]):
-        end (Union[Unset, None, datetime.datetime]):
-        marker (Union[Unset, None, str]):
-        max_keys (Union[Unset, None, int]):
+        username (Union[Unset, str]):
+        start (Union[Unset, datetime.datetime]):
+        end (Union[Unset, datetime.datetime]):
+        marker (Union[Unset, str]):
+        max_keys (Union[Unset, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -191,7 +180,6 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         username=username,
         start=start,
         end=end,
@@ -199,29 +187,28 @@ async def asyncio_detailed(
         max_keys=max_keys,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
-    username: Union[Unset, None, str] = UNSET,
-    start: Union[Unset, None, datetime.datetime] = UNSET,
-    end: Union[Unset, None, datetime.datetime] = UNSET,
-    marker: Union[Unset, None, str] = UNSET,
-    max_keys: Union[Unset, None, int] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    username: Union[Unset, str] = UNSET,
+    start: Union[Unset, datetime.datetime] = UNSET,
+    end: Union[Unset, datetime.datetime] = UNSET,
+    marker: Union[Unset, str] = UNSET,
+    max_keys: Union[Unset, int] = UNSET,
 ) -> Optional[Union[ApiAudits, ServerValidationErrorResponse]]:
     """Get audit log data
 
     Args:
-        username (Union[Unset, None, str]):
-        start (Union[Unset, None, datetime.datetime]):
-        end (Union[Unset, None, datetime.datetime]):
-        marker (Union[Unset, None, str]):
-        max_keys (Union[Unset, None, int]):
+        username (Union[Unset, str]):
+        start (Union[Unset, datetime.datetime]):
+        end (Union[Unset, datetime.datetime]):
+        marker (Union[Unset, str]):
+        max_keys (Union[Unset, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

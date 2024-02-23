@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiStorageUsed")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiStorageUsed:
     """
     Attributes:
@@ -21,7 +22,7 @@ class ApiStorageUsed:
         entity (Union[Unset, str]): Identifier for underlying physical media
         label (Union[Unset, str]): Label for bundled capacity information
         location (Union[Unset, str]): ID of location
-        partial (Union[Unset, bool]): Indicates summary information is incomplete
+        optional (Union[Unset, int]): Number of bytes of cached data stored
         total (Union[Unset, int]): Maximum capacity (if storage has one)
         used (Union[Unset, int]): Number of bytes of physical media used (including overhead)
     """
@@ -32,25 +33,31 @@ class ApiStorageUsed:
     entity: Union[Unset, str] = UNSET
     label: Union[Unset, str] = UNSET
     location: Union[Unset, str] = UNSET
-    partial: Union[Unset, bool] = UNSET
+    optional: Union[Unset, int] = UNSET
     total: Union[Unset, int] = UNSET
     used: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         storage = []
         for storage_item_data in self.storage:
             storage_item = storage_item_data.to_dict()
-
             storage.append(storage_item)
 
         data = self.data
+
         endpoint = self.endpoint
+
         entity = self.entity
+
         label = self.label
+
         location = self.location
-        partial = self.partial
+
+        optional = self.optional
+
         total = self.total
+
         used = self.used
 
         field_dict: Dict[str, Any] = {}
@@ -70,8 +77,8 @@ class ApiStorageUsed:
             field_dict["label"] = label
         if location is not UNSET:
             field_dict["location"] = location
-        if partial is not UNSET:
-            field_dict["partial"] = partial
+        if optional is not UNSET:
+            field_dict["optional"] = optional
         if total is not UNSET:
             field_dict["total"] = total
         if used is not UNSET:
@@ -101,7 +108,7 @@ class ApiStorageUsed:
 
         location = d.pop("location", UNSET)
 
-        partial = d.pop("partial", UNSET)
+        optional = d.pop("optional", UNSET)
 
         total = d.pop("total", UNSET)
 
@@ -114,7 +121,7 @@ class ApiStorageUsed:
             entity=entity,
             label=label,
             location=location,
-            partial=partial,
+            optional=optional,
             total=total,
             used=used,
         )

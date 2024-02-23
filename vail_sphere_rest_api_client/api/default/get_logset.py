@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_logset_url import ApiLogsetURL
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import Response
@@ -12,26 +12,17 @@ from ...types import Response
 
 def _get_kwargs(
     key: str,
-    *,
-    client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/logsets/{key}".format(client.base_url, key=key)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": f"/sl/api/logsets/{key}",
     }
+
+    return _kwargs
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[ApiLogsetURL, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ApiLogsetURL.from_dict(response.json())
@@ -52,7 +43,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[ApiLogsetURL, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -65,7 +56,7 @@ def _build_response(
 def sync_detailed(
     key: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[ApiLogsetURL, ServerValidationErrorResponse]]:
     """Get information about the specified logset, including a URL to download it
 
@@ -82,11 +73,9 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         key=key,
-        client=client,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -96,7 +85,7 @@ def sync_detailed(
 def sync(
     key: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[ApiLogsetURL, ServerValidationErrorResponse]]:
     """Get information about the specified logset, including a URL to download it
 
@@ -120,7 +109,7 @@ def sync(
 async def asyncio_detailed(
     key: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[ApiLogsetURL, ServerValidationErrorResponse]]:
     """Get information about the specified logset, including a URL to download it
 
@@ -137,11 +126,9 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         key=key,
-        client=client,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -149,7 +136,7 @@ async def asyncio_detailed(
 async def asyncio(
     key: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[ApiLogsetURL, ServerValidationErrorResponse]]:
     """Get information about the specified logset, including a URL to download it
 

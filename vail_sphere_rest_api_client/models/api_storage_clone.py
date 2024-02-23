@@ -1,35 +1,40 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ApiStorageClone")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiStorageClone:
     """
     Attributes:
         id (str): Storage identifier
-        nearline (Union[Unset, bool]): Clone may require restore before access
+        archived (Union[Unset, bool]): Clone may require restore before access
         optional (Union[Unset, bool]): Clone will be deleted if space is needed
         partial (Union[Unset, bool]): Clone is not complete
         restored (Union[Unset, bool]): Clone is currently restored
     """
 
     id: str
-    nearline: Union[Unset, bool] = UNSET
+    archived: Union[Unset, bool] = UNSET
     optional: Union[Unset, bool] = UNSET
     partial: Union[Unset, bool] = UNSET
     restored: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id
-        nearline = self.nearline
+
+        archived = self.archived
+
         optional = self.optional
+
         partial = self.partial
+
         restored = self.restored
 
         field_dict: Dict[str, Any] = {}
@@ -39,8 +44,8 @@ class ApiStorageClone:
                 "id": id,
             }
         )
-        if nearline is not UNSET:
-            field_dict["nearline"] = nearline
+        if archived is not UNSET:
+            field_dict["archived"] = archived
         if optional is not UNSET:
             field_dict["optional"] = optional
         if partial is not UNSET:
@@ -55,7 +60,7 @@ class ApiStorageClone:
         d = src_dict.copy()
         id = d.pop("id")
 
-        nearline = d.pop("nearline", UNSET)
+        archived = d.pop("archived", UNSET)
 
         optional = d.pop("optional", UNSET)
 
@@ -65,7 +70,7 @@ class ApiStorageClone:
 
         api_storage_clone = cls(
             id=id,
-            nearline=nearline,
+            archived=archived,
             optional=optional,
             partial=partial,
             restored=restored,

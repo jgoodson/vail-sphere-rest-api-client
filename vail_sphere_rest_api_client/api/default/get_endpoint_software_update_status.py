@@ -1,45 +1,31 @@
 from http import HTTPStatus
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
 from ... import errors
-from ...client import Client
-from ...models.api_storage_graph_data import ApiStorageGraphData
+from ...client import AuthenticatedClient, Client
 from ...models.server_validation_error_response import ServerValidationErrorResponse
+from ...models.worker_update_status import WorkerUpdateStatus
 from ...types import Response
 
 
 def _get_kwargs(
     id: str,
-    *,
-    client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/usage/locations/{id}/graph".format(client.base_url, id=id)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": f"/sl/api/endpoints/{id}/update",
     }
+
+    return _kwargs
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
-) -> Optional[Union[List["ApiStorageGraphData"], ServerValidationErrorResponse]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = []
-        _response_200 = response.json()
-        for response_200_item_data in _response_200:
-            response_200_item = ApiStorageGraphData.from_dict(response_200_item_data)
-
-            response_200.append(response_200_item)
+        response_200 = WorkerUpdateStatus.from_dict(response.json())
 
         return response_200
     if response.status_code == HTTPStatus.NOT_FOUND:
@@ -53,8 +39,8 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
-) -> Response[Union[List["ApiStorageGraphData"], ServerValidationErrorResponse]]:
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -66,9 +52,9 @@ def _build_response(
 def sync_detailed(
     id: str,
     *,
-    client: Client,
-) -> Response[Union[List["ApiStorageGraphData"], ServerValidationErrorResponse]]:
-    """Get location usage graph
+    client: Union[AuthenticatedClient, Client],
+) -> Response[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
+    """Get an endpoint's software update status
 
     Args:
         id (str):
@@ -78,16 +64,14 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[List['ApiStorageGraphData'], ServerValidationErrorResponse]]
+        Response[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]
     """
 
     kwargs = _get_kwargs(
         id=id,
-        client=client,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -97,9 +81,9 @@ def sync_detailed(
 def sync(
     id: str,
     *,
-    client: Client,
-) -> Optional[Union[List["ApiStorageGraphData"], ServerValidationErrorResponse]]:
-    """Get location usage graph
+    client: Union[AuthenticatedClient, Client],
+) -> Optional[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
+    """Get an endpoint's software update status
 
     Args:
         id (str):
@@ -109,7 +93,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[List['ApiStorageGraphData'], ServerValidationErrorResponse]
+        Union[ServerValidationErrorResponse, WorkerUpdateStatus]
     """
 
     return sync_detailed(
@@ -121,9 +105,9 @@ def sync(
 async def asyncio_detailed(
     id: str,
     *,
-    client: Client,
-) -> Response[Union[List["ApiStorageGraphData"], ServerValidationErrorResponse]]:
-    """Get location usage graph
+    client: Union[AuthenticatedClient, Client],
+) -> Response[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
+    """Get an endpoint's software update status
 
     Args:
         id (str):
@@ -133,16 +117,14 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[List['ApiStorageGraphData'], ServerValidationErrorResponse]]
+        Response[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]
     """
 
     kwargs = _get_kwargs(
         id=id,
-        client=client,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -150,9 +132,9 @@ async def asyncio_detailed(
 async def asyncio(
     id: str,
     *,
-    client: Client,
-) -> Optional[Union[List["ApiStorageGraphData"], ServerValidationErrorResponse]]:
-    """Get location usage graph
+    client: Union[AuthenticatedClient, Client],
+) -> Optional[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
+    """Get an endpoint's software update status
 
     Args:
         id (str):
@@ -162,7 +144,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[List['ApiStorageGraphData'], ServerValidationErrorResponse]
+        Union[ServerValidationErrorResponse, WorkerUpdateStatus]
     """
 
     return (

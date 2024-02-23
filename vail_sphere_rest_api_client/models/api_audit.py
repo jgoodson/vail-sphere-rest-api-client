@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiAudit")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiAudit:
     """
     Attributes:
@@ -36,19 +37,25 @@ class ApiAudit:
     server: str
     username: str
     id: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         client_ip = self.client_ip
+
         host_ip = self.host_ip
+
         message = self.message
+
         node_id = self.node_id
+
         request = self.request.to_dict()
 
         resource = self.resource.to_dict()
 
         server = self.server
+
         username = self.username
+
         id = self.id
 
         field_dict: Dict[str, Any] = {}

@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_message_update import ApiMessageUpdate
 from ...models.api_messages import ApiMessages
 from ...models.server_validation_error_response import ServerValidationErrorResponse
@@ -13,41 +13,37 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    client: Client,
-    json_body: ApiMessageUpdate,
-    marker: Union[Unset, None, str] = UNSET,
-    max_keys: Union[Unset, None, int] = UNSET,
+    body: ApiMessageUpdate,
+    marker: Union[Unset, str] = UNSET,
+    max_keys: Union[Unset, int] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/messages".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    headers: Dict[str, Any] = {}
 
     params: Dict[str, Any] = {}
+
     params["marker"] = marker
 
     params["max-keys"] = max_keys
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    headers["Content-type"] = "application/merge-patch+json"
-
-    json_json_body = json_body.to_dict()
-
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "patch",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
-        "json": json_json_body,
+        "url": "/sl/api/messages",
         "params": params,
     }
 
+    _body = body.to_dict()
+
+    _kwargs["json"] = _body
+    headers["Content-Type"] = "application/merge-patch+json"
+
+    _kwargs["headers"] = headers
+    return _kwargs
+
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[ApiMessages, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ApiMessages.from_dict(response.json())
@@ -64,7 +60,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[ApiMessages, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -76,17 +72,17 @@ def _build_response(
 
 def sync_detailed(
     *,
-    client: Client,
-    json_body: ApiMessageUpdate,
-    marker: Union[Unset, None, str] = UNSET,
-    max_keys: Union[Unset, None, int] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiMessageUpdate,
+    marker: Union[Unset, str] = UNSET,
+    max_keys: Union[Unset, int] = UNSET,
 ) -> Response[Union[ApiMessages, ServerValidationErrorResponse]]:
     """Update all messages
 
     Args:
-        marker (Union[Unset, None, str]):
-        max_keys (Union[Unset, None, int]):
-        json_body (ApiMessageUpdate):
+        marker (Union[Unset, str]):
+        max_keys (Union[Unset, int]):
+        body (ApiMessageUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -97,14 +93,12 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
-        json_body=json_body,
+        body=body,
         marker=marker,
         max_keys=max_keys,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -113,17 +107,17 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
-    json_body: ApiMessageUpdate,
-    marker: Union[Unset, None, str] = UNSET,
-    max_keys: Union[Unset, None, int] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiMessageUpdate,
+    marker: Union[Unset, str] = UNSET,
+    max_keys: Union[Unset, int] = UNSET,
 ) -> Optional[Union[ApiMessages, ServerValidationErrorResponse]]:
     """Update all messages
 
     Args:
-        marker (Union[Unset, None, str]):
-        max_keys (Union[Unset, None, int]):
-        json_body (ApiMessageUpdate):
+        marker (Union[Unset, str]):
+        max_keys (Union[Unset, int]):
+        body (ApiMessageUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -135,7 +129,7 @@ def sync(
 
     return sync_detailed(
         client=client,
-        json_body=json_body,
+        body=body,
         marker=marker,
         max_keys=max_keys,
     ).parsed
@@ -143,17 +137,17 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
-    json_body: ApiMessageUpdate,
-    marker: Union[Unset, None, str] = UNSET,
-    max_keys: Union[Unset, None, int] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiMessageUpdate,
+    marker: Union[Unset, str] = UNSET,
+    max_keys: Union[Unset, int] = UNSET,
 ) -> Response[Union[ApiMessages, ServerValidationErrorResponse]]:
     """Update all messages
 
     Args:
-        marker (Union[Unset, None, str]):
-        max_keys (Union[Unset, None, int]):
-        json_body (ApiMessageUpdate):
+        marker (Union[Unset, str]):
+        max_keys (Union[Unset, int]):
+        body (ApiMessageUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -164,31 +158,29 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
-        json_body=json_body,
+        body=body,
         marker=marker,
         max_keys=max_keys,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
-    json_body: ApiMessageUpdate,
-    marker: Union[Unset, None, str] = UNSET,
-    max_keys: Union[Unset, None, int] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiMessageUpdate,
+    marker: Union[Unset, str] = UNSET,
+    max_keys: Union[Unset, int] = UNSET,
 ) -> Optional[Union[ApiMessages, ServerValidationErrorResponse]]:
     """Update all messages
 
     Args:
-        marker (Union[Unset, None, str]):
-        max_keys (Union[Unset, None, int]):
-        json_body (ApiMessageUpdate):
+        marker (Union[Unset, str]):
+        max_keys (Union[Unset, int]):
+        body (ApiMessageUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -201,7 +193,7 @@ async def asyncio(
     return (
         await asyncio_detailed(
             client=client,
-            json_body=json_body,
+            body=body,
             marker=marker,
             max_keys=max_keys,
         )

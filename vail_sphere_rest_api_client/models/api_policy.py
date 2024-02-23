@@ -1,34 +1,39 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.policy_document_statement import PolicyDocumentStatement
+    from ..models.api_statement import ApiStatement
 
 
-T = TypeVar("T", bound="PolicyDocument")
+T = TypeVar("T", bound="ApiPolicy")
 
 
-@attr.s(auto_attribs=True)
-class PolicyDocument:
+@_attrs_define
+class ApiPolicy:
     """
     Attributes:
-        statement (PolicyDocumentStatement):
+        statement (List['ApiStatement']):
         version (str):
         id (Union[Unset, str]):
     """
 
-    statement: "PolicyDocumentStatement"
+    statement: List["ApiStatement"]
     version: str
     id: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        statement = self.statement.to_object()
+        statement = []
+        for statement_item_data in self.statement:
+            statement_item = statement_item_data.to_dict()
+            statement.append(statement_item)
 
         version = self.version
+
         id = self.id
 
         field_dict: Dict[str, Any] = {}
@@ -45,24 +50,29 @@ class PolicyDocument:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any] | List) -> T:
-        from ..models.policy_document_statement import PolicyDocumentStatement
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.api_statement import ApiStatement
 
         d = src_dict.copy()
-        statement = PolicyDocumentStatement.from_object(d.pop("Statement"))
+        statement = []
+        _statement = d.pop("Statement")
+        for statement_item_data in _statement:
+            statement_item = ApiStatement.from_dict(statement_item_data)
+
+            statement.append(statement_item)
 
         version = d.pop("Version")
 
         id = d.pop("Id", UNSET)
 
-        policy_document = cls(
+        api_policy = cls(
             statement=statement,
             version=version,
             id=id,
         )
 
-        policy_document.additional_properties = d
-        return policy_document
+        api_policy.additional_properties = d
+        return api_policy
 
     @property
     def additional_keys(self) -> List[str]:

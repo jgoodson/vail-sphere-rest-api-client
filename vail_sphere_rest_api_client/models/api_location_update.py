@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ApiLocationUpdate")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiLocationUpdate:
     """
     Attributes:
@@ -19,11 +20,13 @@ class ApiLocationUpdate:
     latitude: Union[Unset, float] = UNSET
     longitude: Union[Unset, float] = UNSET
     name: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         latitude = self.latitude
+
         longitude = self.longitude
+
         name = self.name
 
         field_dict: Dict[str, Any] = {}

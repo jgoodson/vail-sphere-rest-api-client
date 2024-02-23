@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiBlackPearlStatus")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiBlackPearlStatus:
     """
     Attributes:
@@ -37,23 +38,30 @@ class ApiBlackPearlStatus:
     name: str
     serial_number: str
     id: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         active_jobs = self.active_jobs
+
         buckets = self.buckets
+
         cache_total = self.cache_total
+
         cache_used = self.cache_used
+
         capacity_summary = []
         for capacity_summary_item_data in self.capacity_summary:
             capacity_summary_item = capacity_summary_item_data.to_dict()
-
             capacity_summary.append(capacity_summary_item)
 
         database_total = self.database_total
+
         database_used = self.database_used
+
         name = self.name
+
         serial_number = self.serial_number
+
         id = self.id
 
         field_dict: Dict[str, Any] = {}

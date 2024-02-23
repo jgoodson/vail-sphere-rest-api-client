@@ -1,23 +1,24 @@
 import datetime
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
-T = TypeVar("T", bound="ApiStorageGraphDataPoint")
+T = TypeVar("T", bound="TseriesDataPoint")
 
 
-@attr.s(auto_attribs=True)
-class ApiStorageGraphDataPoint:
+@_attrs_define
+class TseriesDataPoint:
     """
     Attributes:
         x (datetime.datetime): time of data point
-        y (int): value of data point
+        y (float): value of data point
     """
 
     x: datetime.datetime
-    y: int
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    y: float
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         x = self.x.isoformat()
@@ -42,13 +43,13 @@ class ApiStorageGraphDataPoint:
 
         y = d.pop("y")
 
-        api_storage_graph_data_point = cls(
+        tseries_data_point = cls(
             x=x,
             y=y,
         )
 
-        api_storage_graph_data_point.additional_properties = d
-        return api_storage_graph_data_point
+        tseries_data_point.additional_properties = d
+        return tseries_data_point
 
     @property
     def additional_keys(self) -> List[str]:

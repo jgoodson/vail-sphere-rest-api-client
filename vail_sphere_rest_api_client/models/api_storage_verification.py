@@ -1,28 +1,35 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ApiStorageVerification")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiStorageVerification:
     """
     Attributes:
+        alert (Union[Unset, bool]): Send alert messages when permanent read errors are encountered
         full (Union[Unset, bool]): Perform a full verification of readable clones
     """
 
+    alert: Union[Unset, bool] = UNSET
     full: Union[Unset, bool] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        alert = self.alert
+
         full = self.full
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if alert is not UNSET:
+            field_dict["alert"] = alert
         if full is not UNSET:
             field_dict["full"] = full
 
@@ -31,9 +38,12 @@ class ApiStorageVerification:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
+        alert = d.pop("alert", UNSET)
+
         full = d.pop("full", UNSET)
 
         api_storage_verification = cls(
+            alert=alert,
             full=full,
         )
 

@@ -4,38 +4,33 @@ from typing import Any, Dict, List, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_geocode import ApiGeocode
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
-    client: Client,
-    q: Union[Unset, None, str] = UNSET,
+    q: Union[Unset, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/geocodes".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
     params: Dict[str, Any] = {}
+
     params["q"] = q
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "/sl/api/geocodes",
         "params": params,
     }
 
+    return _kwargs
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[List["ApiGeocode"]]:
+
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[List["ApiGeocode"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
@@ -51,7 +46,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Lis
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[List["ApiGeocode"]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[List["ApiGeocode"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -62,13 +59,13 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Lis
 
 def sync_detailed(
     *,
-    client: Client,
-    q: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    q: Union[Unset, str] = UNSET,
 ) -> Response[List["ApiGeocode"]]:
     """Search for places using an external geocode API.
 
     Args:
-        q (Union[Unset, None, str]):
+        q (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -79,12 +76,10 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         q=q,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -93,13 +88,13 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
-    q: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    q: Union[Unset, str] = UNSET,
 ) -> Optional[List["ApiGeocode"]]:
     """Search for places using an external geocode API.
 
     Args:
-        q (Union[Unset, None, str]):
+        q (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -117,13 +112,13 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
-    q: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    q: Union[Unset, str] = UNSET,
 ) -> Response[List["ApiGeocode"]]:
     """Search for places using an external geocode API.
 
     Args:
-        q (Union[Unset, None, str]):
+        q (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -134,25 +129,23 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         q=q,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
-    q: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    q: Union[Unset, str] = UNSET,
 ) -> Optional[List["ApiGeocode"]]:
     """Search for places using an external geocode API.
 
     Args:
-        q (Union[Unset, None, str]):
+        q (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

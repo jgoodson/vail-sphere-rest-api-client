@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union, cast
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import UNSET, Response, Unset
 
@@ -12,31 +12,26 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     id: str,
     *,
-    client: Client,
-    url: Union[Unset, None, str] = UNSET,
+    url_query: Union[Unset, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/endpoints/{id}/update".format(client.base_url, id=id)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
     params: Dict[str, Any] = {}
-    params["url"] = url
+
+    params["url"] = url_query
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "post",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": f"/sl/api/endpoints/{id}/update",
         "params": params,
     }
 
+    return _kwargs
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Union[Any, ServerValidationErrorResponse]]:
+
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
         return response_204
@@ -54,7 +49,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Uni
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[Union[Any, ServerValidationErrorResponse]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[Union[Any, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -66,14 +63,14 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 def sync_detailed(
     id: str,
     *,
-    client: Client,
-    url: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    url_query: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, ServerValidationErrorResponse]]:
     """Update an endpoint's software version
 
     Args:
         id (str):
-        url (Union[Unset, None, str]):
+        url_query (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -85,12 +82,10 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         id=id,
-        client=client,
-        url=url,
+        url_query=url_query,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -100,14 +95,14 @@ def sync_detailed(
 def sync(
     id: str,
     *,
-    client: Client,
-    url: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    url_query: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     """Update an endpoint's software version
 
     Args:
         id (str):
-        url (Union[Unset, None, str]):
+        url_query (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -120,21 +115,21 @@ def sync(
     return sync_detailed(
         id=id,
         client=client,
-        url=url,
+        url_query=url_query,
     ).parsed
 
 
 async def asyncio_detailed(
     id: str,
     *,
-    client: Client,
-    url: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    url_query: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, ServerValidationErrorResponse]]:
     """Update an endpoint's software version
 
     Args:
         id (str):
-        url (Union[Unset, None, str]):
+        url_query (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -146,12 +141,10 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         id=id,
-        client=client,
-        url=url,
+        url_query=url_query,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -159,14 +152,14 @@ async def asyncio_detailed(
 async def asyncio(
     id: str,
     *,
-    client: Client,
-    url: Union[Unset, None, str] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    url_query: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     """Update an endpoint's software version
 
     Args:
         id (str):
-        url (Union[Unset, None, str]):
+        url_query (Union[Unset, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -180,6 +173,6 @@ async def asyncio(
         await asyncio_detailed(
             id=id,
             client=client,
-            url=url,
+            url_query=url_query,
         )
     ).parsed

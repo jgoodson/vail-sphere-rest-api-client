@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.api_storage_create_cloud_provider import ApiStorageCreateCloudProvider
 from ..models.api_storage_create_storage_class import ApiStorageCreateStorageClass
@@ -10,7 +11,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="ApiStorageCreate")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiStorageCreate:
     """
     Attributes:
@@ -53,33 +54,47 @@ class ApiStorageCreate:
     storage_class: Union[Unset, ApiStorageCreateStorageClass] = UNSET
     url: Union[Unset, str] = UNSET
     warning_threshold: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         endpoint = self.endpoint
+
         name = self.name
+
         type = self.type.value
 
         access_key = self.access_key
+
         arn = self.arn
+
         bucket = self.bucket
+
         caution_threshold = self.caution_threshold
+
         clone_restore = self.clone_restore
+
         cloud_provider: Union[Unset, str] = UNSET
         if not isinstance(self.cloud_provider, Unset):
             cloud_provider = self.cloud_provider.value
 
         credentials = self.credentials
+
         externalid = self.externalid
+
         link = self.link
+
         optional_data = self.optional_data
+
         region = self.region
+
         secret_key = self.secret_key
+
         storage_class: Union[Unset, str] = UNSET
         if not isinstance(self.storage_class, Unset):
             storage_class = self.storage_class.value
 
         url = self.url
+
         warning_threshold = self.warning_threshold
 
         field_dict: Dict[str, Any] = {}

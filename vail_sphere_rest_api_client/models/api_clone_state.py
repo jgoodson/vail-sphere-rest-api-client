@@ -1,7 +1,8 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiCloneState")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiCloneState:
     """
     Attributes:
@@ -27,11 +28,13 @@ class ApiCloneState:
     restoring: Union[Unset, bool] = UNSET
     scheduled: Union[Unset, datetime.datetime] = UNSET
     storage: Union[Unset, List["ApiStorageClone"]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         processing = self.processing
+
         restoring = self.restoring
+
         scheduled: Union[Unset, str] = UNSET
         if not isinstance(self.scheduled, Unset):
             scheduled = self.scheduled.isoformat()
@@ -41,7 +44,6 @@ class ApiCloneState:
             storage = []
             for storage_item_data in self.storage:
                 storage_item = storage_item_data.to_dict()
-
                 storage.append(storage_item)
 
         field_dict: Dict[str, Any] = {}

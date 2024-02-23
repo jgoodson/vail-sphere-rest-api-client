@@ -1,11 +1,12 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 T = TypeVar("T", bound="ApiCertificateUpdate")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiCertificateUpdate:
     """
     Attributes:
@@ -17,11 +18,13 @@ class ApiCertificateUpdate:
     cert_pem: str
     passphrase: str
     private_key_pem: str
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         cert_pem = self.cert_pem
+
         passphrase = self.passphrase
+
         private_key_pem = self.private_key_pem
 
         field_dict: Dict[str, Any] = {}

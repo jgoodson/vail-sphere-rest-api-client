@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.api_service_status_field_status import ApiServiceStatusFieldStatus
 from ..types import UNSET, Unset
@@ -8,7 +9,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="ApiServiceStatusField")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiServiceStatusField:
     """
     Attributes:
@@ -16,7 +17,7 @@ class ApiServiceStatusField:
     """
 
     status: Union[Unset, ApiServiceStatusFieldStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         status: Union[Unset, str] = UNSET

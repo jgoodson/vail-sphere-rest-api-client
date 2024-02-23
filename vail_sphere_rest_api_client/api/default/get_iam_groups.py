@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_iam_groups import ApiIAMGroups
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import Response
@@ -12,26 +12,17 @@ from ...types import Response
 
 def _get_kwargs(
     account: str,
-    *,
-    client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/iam/groups/{account}".format(client.base_url, account=account)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": f"/sl/api/iam/groups/{account}",
     }
+
+    return _kwargs
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[ApiIAMGroups, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ApiIAMGroups.from_dict(response.json())
@@ -48,7 +39,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[ApiIAMGroups, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -61,7 +52,7 @@ def _build_response(
 def sync_detailed(
     account: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[ApiIAMGroups, ServerValidationErrorResponse]]:
     """List all IAM groups for the specified account
 
@@ -78,11 +69,9 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         account=account,
-        client=client,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -92,7 +81,7 @@ def sync_detailed(
 def sync(
     account: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[ApiIAMGroups, ServerValidationErrorResponse]]:
     """List all IAM groups for the specified account
 
@@ -116,7 +105,7 @@ def sync(
 async def asyncio_detailed(
     account: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[ApiIAMGroups, ServerValidationErrorResponse]]:
     """List all IAM groups for the specified account
 
@@ -133,11 +122,9 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         account=account,
-        client=client,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -145,7 +132,7 @@ async def asyncio_detailed(
 async def asyncio(
     account: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[ApiIAMGroups, ServerValidationErrorResponse]]:
     """List all IAM groups for the specified account
 

@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union, cast
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.api_activate import ApiActivate
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import Response
@@ -12,28 +12,27 @@ from ...types import Response
 
 def _get_kwargs(
     *,
-    client: Client,
-    json_body: ApiActivate,
+    body: ApiActivate,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/sphere/activate".format(client.base_url)
+    headers: Dict[str, Any] = {}
 
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
-    json_json_body = json_body.to_dict()
-
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "post",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
-        "json": json_json_body,
+        "url": "/sl/api/sphere/activate",
     }
 
+    _body = body.to_dict()
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Union[Any, ServerValidationErrorResponse]]:
+    _kwargs["json"] = _body
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
+    return _kwargs
+
+
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
         return response_204
@@ -47,7 +46,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Uni
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[Union[Any, ServerValidationErrorResponse]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[Union[Any, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -58,13 +59,13 @@ def _build_response(*, client: Client, response: httpx.Response) -> Response[Uni
 
 def sync_detailed(
     *,
-    client: Client,
-    json_body: ApiActivate,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiActivate,
 ) -> Response[Union[Any, ServerValidationErrorResponse]]:
     """Install latest version and prepare for registration.
 
     Args:
-        json_body (ApiActivate):
+        body (ApiActivate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -75,12 +76,10 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
-        json_body=json_body,
+        body=body,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -89,13 +88,13 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
-    json_body: ApiActivate,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiActivate,
 ) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     """Install latest version and prepare for registration.
 
     Args:
-        json_body (ApiActivate):
+        body (ApiActivate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -107,19 +106,19 @@ def sync(
 
     return sync_detailed(
         client=client,
-        json_body=json_body,
+        body=body,
     ).parsed
 
 
 async def asyncio_detailed(
     *,
-    client: Client,
-    json_body: ApiActivate,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiActivate,
 ) -> Response[Union[Any, ServerValidationErrorResponse]]:
     """Install latest version and prepare for registration.
 
     Args:
-        json_body (ApiActivate):
+        body (ApiActivate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -130,25 +129,23 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
-        json_body=json_body,
+        body=body,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
     *,
-    client: Client,
-    json_body: ApiActivate,
+    client: Union[AuthenticatedClient, Client],
+    body: ApiActivate,
 ) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     """Install latest version and prepare for registration.
 
     Args:
-        json_body (ApiActivate):
+        body (ApiActivate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -161,6 +158,6 @@ async def asyncio(
     return (
         await asyncio_detailed(
             client=client,
-            json_body=json_body,
+            body=body,
         )
     ).parsed

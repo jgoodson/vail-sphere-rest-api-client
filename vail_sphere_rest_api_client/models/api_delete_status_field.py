@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.api_delete_status_field_status import ApiDeleteStatusFieldStatus
 from ..types import UNSET, Unset
@@ -8,7 +9,7 @@ from ..types import UNSET, Unset
 T = TypeVar("T", bound="ApiDeleteStatusField")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiDeleteStatusField:
     """
     Attributes:
@@ -16,7 +17,7 @@ class ApiDeleteStatusField:
     """
 
     status: Union[Unset, ApiDeleteStatusFieldStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         status: Union[Unset, str] = UNSET

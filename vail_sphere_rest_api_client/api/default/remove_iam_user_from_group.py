@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union, cast
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import Response
 
@@ -13,27 +13,18 @@ def _get_kwargs(
     account: str,
     username: str,
     group: str,
-    *,
-    client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/iam/users/{account}/{username}/groups/{group}".format(
-        client.base_url, account=account, username=username, group=group
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "delete",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": f"/sl/api/iam/users/{account}/{username}/groups/{group}",
     }
 
+    return _kwargs
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Union[Any, ServerValidationErrorResponse]]:
+
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
         return response_204
@@ -51,7 +42,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Uni
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[Union[Any, ServerValidationErrorResponse]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[Union[Any, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -65,7 +58,7 @@ def sync_detailed(
     username: str,
     group: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[Any, ServerValidationErrorResponse]]:
     """Remove the specified user from the specified group. The group will not be deleted.
 
@@ -86,11 +79,9 @@ def sync_detailed(
         account=account,
         username=username,
         group=group,
-        client=client,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -102,7 +93,7 @@ def sync(
     username: str,
     group: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     """Remove the specified user from the specified group. The group will not be deleted.
 
@@ -132,7 +123,7 @@ async def asyncio_detailed(
     username: str,
     group: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[Any, ServerValidationErrorResponse]]:
     """Remove the specified user from the specified group. The group will not be deleted.
 
@@ -153,11 +144,9 @@ async def asyncio_detailed(
         account=account,
         username=username,
         group=group,
-        client=client,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -167,7 +156,7 @@ async def asyncio(
     username: str,
     group: str,
     *,
-    client: Client,
+    client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     """Remove the specified user from the specified group. The group will not be deleted.
 

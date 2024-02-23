@@ -1,54 +1,31 @@
-import datetime
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
-from dateutil.parser import isoparse
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="ApiPerformanceDataPoint")
+T = TypeVar("T", bound="ApiStatement")
 
 
-@attr.s(auto_attribs=True)
-class ApiPerformanceDataPoint:
-    """
-    Attributes:
-        x (datetime.datetime):
-        y (float):
-    """
+@_attrs_define
+class ApiStatement:
+    """ """
 
-    x: datetime.datetime
-    y: float
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        x = self.x.isoformat()
-
-        y = self.y
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update(
-            {
-                "x": x,
-                "y": y,
-            }
-        )
+        field_dict.update({})
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        x = isoparse(d.pop("x"))
+        api_statement = cls()
 
-        y = d.pop("y")
-
-        api_performance_data_point = cls(
-            x=x,
-            y=y,
-        )
-
-        api_performance_data_point.additional_properties = d
-        return api_performance_data_point
+        api_statement.additional_properties = d
+        return api_statement
 
     @property
     def additional_keys(self) -> List[str]:

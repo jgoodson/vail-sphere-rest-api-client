@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ApiRetention")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiRetention:
     """
     Attributes:
@@ -19,11 +20,13 @@ class ApiRetention:
     compliance: Union[Unset, bool] = UNSET
     days: Union[Unset, int] = UNSET
     years: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         compliance = self.compliance
+
         days = self.days
+
         years = self.years
 
         field_dict: Dict[str, Any] = {}

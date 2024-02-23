@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Union, cast
 import httpx
 
 from ... import errors
-from ...client import Client
+from ...client import AuthenticatedClient, Client
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import UNSET, Response, Unset
 
@@ -14,36 +14,29 @@ def _get_kwargs(
     object_: str,
     storage: str,
     *,
-    client: Client,
-    version: Union[Unset, None, str] = UNSET,
-    optional: Union[Unset, None, bool] = UNSET,
+    version: Union[Unset, str] = UNSET,
+    optional: Union[Unset, bool] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/sl/api/buckets/{name}/objects/{object}/{storage}".format(
-        client.base_url, name=name, object=object_, storage=storage
-    )
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
     params: Dict[str, Any] = {}
+
     params["version"] = version
 
     params["optional"] = optional
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "delete",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": f"/sl/api/buckets/{name}/objects/{object_}/{storage}",
         "params": params,
     }
 
+    return _kwargs
 
-def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Union[Any, ServerValidationErrorResponse]]:
+
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
         return response_204
@@ -61,7 +54,9 @@ def _parse_response(*, client: Client, response: httpx.Response) -> Optional[Uni
         return None
 
 
-def _build_response(*, client: Client, response: httpx.Response) -> Response[Union[Any, ServerValidationErrorResponse]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[Union[Any, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -75,9 +70,9 @@ def sync_detailed(
     object_: str,
     storage: str,
     *,
-    client: Client,
-    version: Union[Unset, None, str] = UNSET,
-    optional: Union[Unset, None, bool] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    version: Union[Unset, str] = UNSET,
+    optional: Union[Unset, bool] = UNSET,
 ) -> Response[Union[Any, ServerValidationErrorResponse]]:
     """Delete object clone
 
@@ -85,8 +80,8 @@ def sync_detailed(
         name (str):
         object_ (str):
         storage (str):
-        version (Union[Unset, None, str]):
-        optional (Union[Unset, None, bool]):
+        version (Union[Unset, str]):
+        optional (Union[Unset, bool]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -100,13 +95,11 @@ def sync_detailed(
         name=name,
         object_=object_,
         storage=storage,
-        client=client,
         version=version,
         optional=optional,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -118,9 +111,9 @@ def sync(
     object_: str,
     storage: str,
     *,
-    client: Client,
-    version: Union[Unset, None, str] = UNSET,
-    optional: Union[Unset, None, bool] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    version: Union[Unset, str] = UNSET,
+    optional: Union[Unset, bool] = UNSET,
 ) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     """Delete object clone
 
@@ -128,8 +121,8 @@ def sync(
         name (str):
         object_ (str):
         storage (str):
-        version (Union[Unset, None, str]):
-        optional (Union[Unset, None, bool]):
+        version (Union[Unset, str]):
+        optional (Union[Unset, bool]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -154,9 +147,9 @@ async def asyncio_detailed(
     object_: str,
     storage: str,
     *,
-    client: Client,
-    version: Union[Unset, None, str] = UNSET,
-    optional: Union[Unset, None, bool] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    version: Union[Unset, str] = UNSET,
+    optional: Union[Unset, bool] = UNSET,
 ) -> Response[Union[Any, ServerValidationErrorResponse]]:
     """Delete object clone
 
@@ -164,8 +157,8 @@ async def asyncio_detailed(
         name (str):
         object_ (str):
         storage (str):
-        version (Union[Unset, None, str]):
-        optional (Union[Unset, None, bool]):
+        version (Union[Unset, str]):
+        optional (Union[Unset, bool]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -179,13 +172,11 @@ async def asyncio_detailed(
         name=name,
         object_=object_,
         storage=storage,
-        client=client,
         version=version,
         optional=optional,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -195,9 +186,9 @@ async def asyncio(
     object_: str,
     storage: str,
     *,
-    client: Client,
-    version: Union[Unset, None, str] = UNSET,
-    optional: Union[Unset, None, bool] = UNSET,
+    client: Union[AuthenticatedClient, Client],
+    version: Union[Unset, str] = UNSET,
+    optional: Union[Unset, bool] = UNSET,
 ) -> Optional[Union[Any, ServerValidationErrorResponse]]:
     """Delete object clone
 
@@ -205,8 +196,8 @@ async def asyncio(
         name (str):
         object_ (str):
         storage (str):
-        version (Union[Unset, None, str]):
-        optional (Union[Unset, None, bool]):
+        version (Union[Unset, str]):
+        optional (Union[Unset, bool]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -1,7 +1,8 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ApiAuditRequest")
 
 
-@attr.s(auto_attribs=True)
+@_attrs_define
 class ApiAuditRequest:
     """
     Attributes:
@@ -27,11 +28,13 @@ class ApiAuditRequest:
     path: str
     time: datetime.datetime
     data: Union[Unset, "ApiAuditRequestData"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         method = self.method
+
         path = self.path
+
         time = self.time.isoformat()
 
         data: Union[Unset, Dict[str, Any]] = UNSET
