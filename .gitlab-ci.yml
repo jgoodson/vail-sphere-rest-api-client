@@ -1,0 +1,39 @@
+stages:
+  - build
+  - test
+
+default:
+  before_script:
+    - python3 -m pip install poetry
+    - python3 -m poetry config virtualenvs.in-project true --local
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+.poetry:
+  before_script:
+
+create-env:
+  stage: build
+  image: python:3.11
+  cache:
+    - key: poetry-$CI_COMMIT_REF_SLUG
+      paths: [.venv]
+    - key: pip-$CI_COMMIT_REF_SLUG
+      paths: [.cache/pip]
+  script:
+    - python3 -m poetry install
+
+check:
+  stage: test
+  image: python:3.11
+  cache:
+    - key: poetry-$CI_COMMIT_REF_SLUG
+      paths: [.venv]
+      policy: pull
+    - key: pip-$CI_COMMIT_REF_SLUG
+      paths: [.cache/pip]
+      policy: pull
+  script:
+    - python3 -m poetry run ruff check vail_sphere_rest_api_client
+    - python3 -m poetry run mypy vail_sphere_rest_api_client
