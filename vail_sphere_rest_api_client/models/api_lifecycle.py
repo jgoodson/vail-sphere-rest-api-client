@@ -21,7 +21,9 @@ class ApiLifecycle:
         id (str): Lifecycle identifier
         modified (datetime.datetime): The last modified date
         name (str): The lifecycle's name
+        after_put (Union[Unset, bool]): True if lifecycle is not used for initial placement
         description (Union[Unset, str]): The lifecycle's description
+        ignore_class (Union[Unset, bool]): True if the storage class requested in a put should be ignored
         linked_storage (Union[Unset, str]): ID of any linked Cloud or BlackPearl storage used as a destination
         markers (Union[Unset, bool]): True if expired delete markers should be deleted
         rules (Union[Unset, List['ApiRule']]): The lifecycle's rules
@@ -31,7 +33,9 @@ class ApiLifecycle:
     id: str
     modified: datetime.datetime
     name: str
+    after_put: Union[Unset, bool] = UNSET
     description: Union[Unset, str] = UNSET
+    ignore_class: Union[Unset, bool] = UNSET
     linked_storage: Union[Unset, str] = UNSET
     markers: Union[Unset, bool] = UNSET
     rules: Union[Unset, List["ApiRule"]] = UNSET
@@ -45,7 +49,11 @@ class ApiLifecycle:
 
         name = self.name
 
+        after_put = self.after_put
+
         description = self.description
+
+        ignore_class = self.ignore_class
 
         linked_storage = self.linked_storage
 
@@ -69,8 +77,12 @@ class ApiLifecycle:
                 "name": name,
             }
         )
+        if after_put is not UNSET:
+            field_dict["afterPut"] = after_put
         if description is not UNSET:
             field_dict["description"] = description
+        if ignore_class is not UNSET:
+            field_dict["ignoreClass"] = ignore_class
         if linked_storage is not UNSET:
             field_dict["linkedStorage"] = linked_storage
         if markers is not UNSET:
@@ -93,7 +105,11 @@ class ApiLifecycle:
 
         name = d.pop("name")
 
+        after_put = d.pop("afterPut", UNSET)
+
         description = d.pop("description", UNSET)
+
+        ignore_class = d.pop("ignoreClass", UNSET)
 
         linked_storage = d.pop("linkedStorage", UNSET)
 
@@ -112,7 +128,9 @@ class ApiLifecycle:
             id=id,
             modified=modified,
             name=name,
+            after_put=after_put,
             description=description,
+            ignore_class=ignore_class,
             linked_storage=linked_storage,
             markers=markers,
             rules=rules,

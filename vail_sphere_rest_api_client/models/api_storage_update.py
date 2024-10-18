@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -7,6 +7,10 @@ from ..models.api_storage_update_status import ApiStorageUpdateStatus
 from ..models.api_storage_update_storage_class import ApiStorageUpdateStorageClass
 from ..types import UNSET, Unset
 
+if TYPE_CHECKING:
+    from ..models.api_storage_update_parameters import ApiStorageUpdateParameters
+
+
 T = TypeVar("T", bound="ApiStorageUpdate")
 
 
@@ -14,16 +18,18 @@ T = TypeVar("T", bound="ApiStorageUpdate")
 class ApiStorageUpdate:
     """
     Attributes:
-        access_key (Union[Unset, str]): The account owner's access key, or the Azure storage account
+        access_key (Union[Unset, str]): Deprecated: use target parameters
         alternate (Union[Unset, str]): ID of alternate storage to move clones to during delete
-        arn (Union[Unset, str]): The IAM role arn to use to access the account.  This can be used as an alternative to
-            providing accessKey and secretKey.
+        arn (Union[Unset, str]): Deprecated: use target parameters
         caution_threshold (Union[Unset, int]): Caution threshold capacity for the storage
         clone_restore (Union[Unset, bool]): Create a new clone when restoring this storage
-        externalid (Union[Unset, str]): The IAM role's external ID.
+        externalid (Union[Unset, str]): Deprecated: use target parameters
         name (Union[Unset, str]): Storage name
         optional_data (Union[Unset, int]): Percentage of space available for optional data
-        secret_key (Union[Unset, str]): The account owner's secret key
+        parameters (Union[Unset, ApiStorageUpdateParameters]): Target parameters specific to the target type.
+        pause_notifications (Union[Unset, bool]): Link notifications are paused if true
+        recoverable (Union[Unset, bool]): Additional content is stored to allow third-party recovery
+        secret_key (Union[Unset, str]): Deprecated: use target parameters
         status (Union[Unset, ApiStorageUpdateStatus]): Status can be set to deleting to begin background deletion
         storage_class (Union[Unset, ApiStorageUpdateStorageClass]): Storage class
         warning_threshold (Union[Unset, int]): Warning threshold capacity for the storage
@@ -37,6 +43,9 @@ class ApiStorageUpdate:
     externalid: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
     optional_data: Union[Unset, int] = UNSET
+    parameters: Union[Unset, "ApiStorageUpdateParameters"] = UNSET
+    pause_notifications: Union[Unset, bool] = UNSET
+    recoverable: Union[Unset, bool] = UNSET
     secret_key: Union[Unset, str] = UNSET
     status: Union[Unset, ApiStorageUpdateStatus] = UNSET
     storage_class: Union[Unset, ApiStorageUpdateStorageClass] = UNSET
@@ -59,6 +68,14 @@ class ApiStorageUpdate:
         name = self.name
 
         optional_data = self.optional_data
+
+        parameters: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.parameters, Unset):
+            parameters = self.parameters.to_dict()
+
+        pause_notifications = self.pause_notifications
+
+        recoverable = self.recoverable
 
         secret_key = self.secret_key
 
@@ -91,6 +108,12 @@ class ApiStorageUpdate:
             field_dict["name"] = name
         if optional_data is not UNSET:
             field_dict["optionalData"] = optional_data
+        if parameters is not UNSET:
+            field_dict["parameters"] = parameters
+        if pause_notifications is not UNSET:
+            field_dict["pauseNotifications"] = pause_notifications
+        if recoverable is not UNSET:
+            field_dict["recoverable"] = recoverable
         if secret_key is not UNSET:
             field_dict["secretKey"] = secret_key
         if status is not UNSET:
@@ -104,6 +127,8 @@ class ApiStorageUpdate:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.api_storage_update_parameters import ApiStorageUpdateParameters
+
         d = src_dict.copy()
         access_key = d.pop("accessKey", UNSET)
 
@@ -120,6 +145,17 @@ class ApiStorageUpdate:
         name = d.pop("name", UNSET)
 
         optional_data = d.pop("optionalData", UNSET)
+
+        _parameters = d.pop("parameters", UNSET)
+        parameters: Union[Unset, ApiStorageUpdateParameters]
+        if isinstance(_parameters, Unset):
+            parameters = UNSET
+        else:
+            parameters = ApiStorageUpdateParameters.from_dict(_parameters)
+
+        pause_notifications = d.pop("pauseNotifications", UNSET)
+
+        recoverable = d.pop("recoverable", UNSET)
 
         secret_key = d.pop("secretKey", UNSET)
 
@@ -148,6 +184,9 @@ class ApiStorageUpdate:
             externalid=externalid,
             name=name,
             optional_data=optional_data,
+            parameters=parameters,
+            pause_notifications=pause_notifications,
+            recoverable=recoverable,
             secret_key=secret_key,
             status=status,
             storage_class=storage_class,

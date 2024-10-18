@@ -66,7 +66,7 @@ def sync_detailed(
     marker: Union[Unset, str] = UNSET,
     max_keys: Union[Unset, int] = UNSET,
 ) -> Response[Union[ApiLogsets, ServerValidationErrorResponse]]:
-    """List all logsets stored in Vail's AWS S3 Sphere bucket
+    """List all log sets stored on the local node
 
     Args:
         marker (Union[Unset, str]):
@@ -98,7 +98,7 @@ def sync(
     marker: Union[Unset, str] = UNSET,
     max_keys: Union[Unset, int] = UNSET,
 ) -> Optional[Union[ApiLogsets, ServerValidationErrorResponse]]:
-    """List all logsets stored in Vail's AWS S3 Sphere bucket
+    """List all log sets stored on the local node
 
     Args:
         marker (Union[Unset, str]):
@@ -125,7 +125,7 @@ async def asyncio_detailed(
     marker: Union[Unset, str] = UNSET,
     max_keys: Union[Unset, int] = UNSET,
 ) -> Response[Union[ApiLogsets, ServerValidationErrorResponse]]:
-    """List all logsets stored in Vail's AWS S3 Sphere bucket
+    """List all log sets stored on the local node
 
     Args:
         marker (Union[Unset, str]):
@@ -155,7 +155,7 @@ async def asyncio(
     marker: Union[Unset, str] = UNSET,
     max_keys: Union[Unset, int] = UNSET,
 ) -> Optional[Union[ApiLogsets, ServerValidationErrorResponse]]:
-    """List all logsets stored in Vail's AWS S3 Sphere bucket
+    """List all log sets stored on the local node
 
     Args:
         marker (Union[Unset, str]):

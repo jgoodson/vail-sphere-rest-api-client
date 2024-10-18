@@ -17,14 +17,18 @@ class ApiLifecycleCreate:
     """
     Attributes:
         name (str): The lifecycle's name
+        after_put (Union[Unset, bool]): True if lifecycle is not used for initial placement
         description (Union[Unset, str]): The lifecycle's description
+        ignore_class (Union[Unset, bool]): True if the storage class requested in a put should be ignored
         markers (Union[Unset, bool]): True if expired delete markers should be deleted
         rules (Union[Unset, List['ApiRule']]): The lifecycle's rules
         uploads (Union[Unset, int]): The number of days to wait before deleting incomplete multipart uploads
     """
 
     name: str
+    after_put: Union[Unset, bool] = UNSET
     description: Union[Unset, str] = UNSET
+    ignore_class: Union[Unset, bool] = UNSET
     markers: Union[Unset, bool] = UNSET
     rules: Union[Unset, List["ApiRule"]] = UNSET
     uploads: Union[Unset, int] = UNSET
@@ -33,7 +37,11 @@ class ApiLifecycleCreate:
     def to_dict(self) -> Dict[str, Any]:
         name = self.name
 
+        after_put = self.after_put
+
         description = self.description
+
+        ignore_class = self.ignore_class
 
         markers = self.markers
 
@@ -53,8 +61,12 @@ class ApiLifecycleCreate:
                 "name": name,
             }
         )
+        if after_put is not UNSET:
+            field_dict["afterPut"] = after_put
         if description is not UNSET:
             field_dict["description"] = description
+        if ignore_class is not UNSET:
+            field_dict["ignoreClass"] = ignore_class
         if markers is not UNSET:
             field_dict["markers"] = markers
         if rules is not UNSET:
@@ -71,7 +83,11 @@ class ApiLifecycleCreate:
         d = src_dict.copy()
         name = d.pop("name")
 
+        after_put = d.pop("afterPut", UNSET)
+
         description = d.pop("description", UNSET)
+
+        ignore_class = d.pop("ignoreClass", UNSET)
 
         markers = d.pop("markers", UNSET)
 
@@ -86,7 +102,9 @@ class ApiLifecycleCreate:
 
         api_lifecycle_create = cls(
             name=name,
+            after_put=after_put,
             description=description,
+            ignore_class=ignore_class,
             markers=markers,
             rules=rules,
             uploads=uploads,

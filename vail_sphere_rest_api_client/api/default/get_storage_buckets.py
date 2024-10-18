@@ -57,7 +57,7 @@ def sync_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[List[str], ServerValidationErrorResponse]]:
-    """Get buckets for the given storage.  Only applicable for BlackPearl and Cloud storage.
+    """Deprecated: use ListTargets instead.
 
     Args:
         id (str):
@@ -86,7 +86,7 @@ def sync(
     *,
     client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[List[str], ServerValidationErrorResponse]]:
-    """Get buckets for the given storage.  Only applicable for BlackPearl and Cloud storage.
+    """Deprecated: use ListTargets instead.
 
     Args:
         id (str):
@@ -110,7 +110,7 @@ async def asyncio_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[List[str], ServerValidationErrorResponse]]:
-    """Get buckets for the given storage.  Only applicable for BlackPearl and Cloud storage.
+    """Deprecated: use ListTargets instead.
 
     Args:
         id (str):
@@ -137,7 +137,7 @@ async def asyncio(
     *,
     client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[List[str], ServerValidationErrorResponse]]:
-    """Get buckets for the given storage.  Only applicable for BlackPearl and Cloud storage.
+    """Deprecated: use ListTargets instead.
 
     Args:
         id (str):

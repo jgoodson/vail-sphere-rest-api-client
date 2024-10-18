@@ -29,7 +29,7 @@ class ApiObject:
         retain_until (Union[Unset, datetime.datetime]): If present, an object lock prevents deletion until this time
         size (Union[Unset, int]): Size of the object
         storage_class (Union[Unset, ApiObjectStorageClass]): Storage class
-        version_id (Union[Unset, str]): Version ID (only present when querying versions)
+        version_id (Union[Unset, str]): Version ID
     """
 
     key: str

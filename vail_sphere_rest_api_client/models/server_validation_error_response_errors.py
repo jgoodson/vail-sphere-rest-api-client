@@ -24,8 +24,6 @@ class ServerValidationErrorResponseErrors:
                 additional_property_item = additional_property_item_data.to_dict()
                 field_dict[prop_name].append(additional_property_item)
 
-        field_dict.update({})
-
         return field_dict
 
     @classmethod

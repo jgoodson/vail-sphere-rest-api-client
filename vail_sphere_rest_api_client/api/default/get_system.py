@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.api_system import ApiSystem
+from ...models.api_cloudless_system import ApiCloudlessSystem
 from ...types import Response
 
 
@@ -18,9 +18,11 @@ def _get_kwargs() -> Dict[str, Any]:
     return _kwargs
 
 
-def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[ApiSystem]:
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[ApiCloudlessSystem]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = ApiSystem.from_dict(response.json())
+        response_200 = ApiCloudlessSystem.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -29,7 +31,9 @@ def _parse_response(*, client: Union[AuthenticatedClient, Client], response: htt
         return None
 
 
-def _build_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Response[ApiSystem]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[ApiCloudlessSystem]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -41,7 +45,7 @@ def _build_response(*, client: Union[AuthenticatedClient, Client], response: htt
 def sync_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Response[ApiSystem]:
+) -> Response[ApiCloudlessSystem]:
     """Get information about this system.
 
     Raises:
@@ -49,7 +53,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiSystem]
+        Response[ApiCloudlessSystem]
     """
 
     kwargs = _get_kwargs()
@@ -64,7 +68,7 @@ def sync_detailed(
 def sync(
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Optional[ApiSystem]:
+) -> Optional[ApiCloudlessSystem]:
     """Get information about this system.
 
     Raises:
@@ -72,7 +76,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiSystem
+        ApiCloudlessSystem
     """
 
     return sync_detailed(
@@ -83,7 +87,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Response[ApiSystem]:
+) -> Response[ApiCloudlessSystem]:
     """Get information about this system.
 
     Raises:
@@ -91,7 +95,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiSystem]
+        Response[ApiCloudlessSystem]
     """
 
     kwargs = _get_kwargs()
@@ -104,7 +108,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Optional[ApiSystem]:
+) -> Optional[ApiCloudlessSystem]:
     """Get information about this system.
 
     Raises:
@@ -112,7 +116,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiSystem
+        ApiCloudlessSystem
     """
 
     return (

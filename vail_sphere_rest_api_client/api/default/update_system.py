@@ -5,15 +5,15 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.api_cloudless_system_update import ApiCloudlessSystemUpdate
 from ...models.api_system import ApiSystem
-from ...models.api_system_update import ApiSystemUpdate
 from ...models.server_validation_error_response import ServerValidationErrorResponse
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    body: ApiSystemUpdate,
+    body: ApiCloudlessSystemUpdate,
 ) -> Dict[str, Any]:
     headers: Dict[str, Any] = {}
 
@@ -62,12 +62,12 @@ def _build_response(
 def sync_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
-    body: ApiSystemUpdate,
+    body: ApiCloudlessSystemUpdate,
 ) -> Response[Union[ApiSystem, ServerValidationErrorResponse]]:
     """Update the system
 
     Args:
-        body (ApiSystemUpdate):
+        body (ApiCloudlessSystemUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -91,12 +91,12 @@ def sync_detailed(
 def sync(
     *,
     client: Union[AuthenticatedClient, Client],
-    body: ApiSystemUpdate,
+    body: ApiCloudlessSystemUpdate,
 ) -> Optional[Union[ApiSystem, ServerValidationErrorResponse]]:
     """Update the system
 
     Args:
-        body (ApiSystemUpdate):
+        body (ApiCloudlessSystemUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -115,12 +115,12 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
-    body: ApiSystemUpdate,
+    body: ApiCloudlessSystemUpdate,
 ) -> Response[Union[ApiSystem, ServerValidationErrorResponse]]:
     """Update the system
 
     Args:
-        body (ApiSystemUpdate):
+        body (ApiCloudlessSystemUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -142,12 +142,12 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Union[AuthenticatedClient, Client],
-    body: ApiSystemUpdate,
+    body: ApiCloudlessSystemUpdate,
 ) -> Optional[Union[ApiSystem, ServerValidationErrorResponse]]:
     """Update the system
 
     Args:
-        body (ApiSystemUpdate):
+        body (ApiCloudlessSystemUpdate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.api_performance_dataset import ApiPerformanceDataset
+from ...models.rrd_performance_dataset import RrdPerformanceDataset
 from ...types import UNSET, Response, Unset
 
 
@@ -35,12 +35,12 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[List["ApiPerformanceDataset"]]:
+) -> Optional[List["RrdPerformanceDataset"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = ApiPerformanceDataset.from_dict(response_200_item_data)
+            response_200_item = RrdPerformanceDataset.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -53,7 +53,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[List["ApiPerformanceDataset"]]:
+) -> Response[List["RrdPerformanceDataset"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -69,8 +69,8 @@ def sync_detailed(
     client: Union[AuthenticatedClient, Client],
     length: Union[Unset, str] = UNSET,
     fields: Union[Unset, str] = UNSET,
-) -> Response[List["ApiPerformanceDataset"]]:
-    """Get performance metrics for an endpoint
+) -> Response[List["RrdPerformanceDataset"]]:
+    """Deprecated: use getGet performance metrics for an endpoint
 
     Args:
         table (str):
@@ -83,7 +83,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['ApiPerformanceDataset']]
+        Response[List['RrdPerformanceDataset']]
     """
 
     kwargs = _get_kwargs(
@@ -107,8 +107,8 @@ def sync(
     client: Union[AuthenticatedClient, Client],
     length: Union[Unset, str] = UNSET,
     fields: Union[Unset, str] = UNSET,
-) -> Optional[List["ApiPerformanceDataset"]]:
-    """Get performance metrics for an endpoint
+) -> Optional[List["RrdPerformanceDataset"]]:
+    """Deprecated: use getGet performance metrics for an endpoint
 
     Args:
         table (str):
@@ -121,7 +121,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['ApiPerformanceDataset']
+        List['RrdPerformanceDataset']
     """
 
     return sync_detailed(
@@ -140,8 +140,8 @@ async def asyncio_detailed(
     client: Union[AuthenticatedClient, Client],
     length: Union[Unset, str] = UNSET,
     fields: Union[Unset, str] = UNSET,
-) -> Response[List["ApiPerformanceDataset"]]:
-    """Get performance metrics for an endpoint
+) -> Response[List["RrdPerformanceDataset"]]:
+    """Deprecated: use getGet performance metrics for an endpoint
 
     Args:
         table (str):
@@ -154,7 +154,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['ApiPerformanceDataset']]
+        Response[List['RrdPerformanceDataset']]
     """
 
     kwargs = _get_kwargs(
@@ -176,8 +176,8 @@ async def asyncio(
     client: Union[AuthenticatedClient, Client],
     length: Union[Unset, str] = UNSET,
     fields: Union[Unset, str] = UNSET,
-) -> Optional[List["ApiPerformanceDataset"]]:
-    """Get performance metrics for an endpoint
+) -> Optional[List["RrdPerformanceDataset"]]:
+    """Deprecated: use getGet performance metrics for an endpoint
 
     Args:
         table (str):
@@ -190,7 +190,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['ApiPerformanceDataset']
+        List['RrdPerformanceDataset']
     """
 
     return (

@@ -58,7 +58,7 @@ def sync_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[ApiBpPlacement, ServerValidationErrorResponse]]:
-    """Get placement for the given storage.  Only applicable for BlackPearl.
+    """Deprecated: Get storage target item instead.
 
     Args:
         id (str):
@@ -87,7 +87,7 @@ def sync(
     *,
     client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[ApiBpPlacement, ServerValidationErrorResponse]]:
-    """Get placement for the given storage.  Only applicable for BlackPearl.
+    """Deprecated: Get storage target item instead.
 
     Args:
         id (str):
@@ -111,7 +111,7 @@ async def asyncio_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
 ) -> Response[Union[ApiBpPlacement, ServerValidationErrorResponse]]:
-    """Get placement for the given storage.  Only applicable for BlackPearl.
+    """Deprecated: Get storage target item instead.
 
     Args:
         id (str):
@@ -138,7 +138,7 @@ async def asyncio(
     *,
     client: Union[AuthenticatedClient, Client],
 ) -> Optional[Union[ApiBpPlacement, ServerValidationErrorResponse]]:
-    """Get placement for the given storage.  Only applicable for BlackPearl.
+    """Deprecated: Get storage target item instead.
 
     Args:
         id (str):

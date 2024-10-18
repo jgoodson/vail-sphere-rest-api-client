@@ -63,7 +63,7 @@ def sync_detailed(
     client: Union[AuthenticatedClient, Client],
     body: ApiCloudBucketRequest,
 ) -> Response[Union[List[str], ServerValidationErrorResponse]]:
-    """List all cloud buckets according to the given parameters
+    """Deprecated bucket listing (use target listing instead)
 
     Args:
         body (ApiCloudBucketRequest):
@@ -92,7 +92,7 @@ def sync(
     client: Union[AuthenticatedClient, Client],
     body: ApiCloudBucketRequest,
 ) -> Optional[Union[List[str], ServerValidationErrorResponse]]:
-    """List all cloud buckets according to the given parameters
+    """Deprecated bucket listing (use target listing instead)
 
     Args:
         body (ApiCloudBucketRequest):
@@ -116,7 +116,7 @@ async def asyncio_detailed(
     client: Union[AuthenticatedClient, Client],
     body: ApiCloudBucketRequest,
 ) -> Response[Union[List[str], ServerValidationErrorResponse]]:
-    """List all cloud buckets according to the given parameters
+    """Deprecated bucket listing (use target listing instead)
 
     Args:
         body (ApiCloudBucketRequest):
@@ -143,7 +143,7 @@ async def asyncio(
     client: Union[AuthenticatedClient, Client],
     body: ApiCloudBucketRequest,
 ) -> Optional[Union[List[str], ServerValidationErrorResponse]]:
-    """List all cloud buckets according to the given parameters
+    """Deprecated bucket listing (use target listing instead)
 
     Args:
         body (ApiCloudBucketRequest):

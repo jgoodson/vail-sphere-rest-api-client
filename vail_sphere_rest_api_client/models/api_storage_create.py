@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -8,6 +8,10 @@ from ..models.api_storage_create_storage_class import ApiStorageCreateStorageCla
 from ..models.api_storage_create_type import ApiStorageCreateType
 from ..types import UNSET, Unset
 
+if TYPE_CHECKING:
+    from ..models.api_storage_create_parameters import ApiStorageCreateParameters
+
+
 T = TypeVar("T", bound="ApiStorageCreate")
 
 
@@ -16,29 +20,34 @@ class ApiStorageCreate:
     """
     Attributes:
         endpoint (str): The id of the Vail endpoint owning this storage
+        item (str): The endpoint's target item ID for this storage
         name (str): Storage name
-        type (ApiStorageCreateType): Storage type
-        access_key (Union[Unset, str]): The account owner's access key, or the Azure storage account
-        arn (Union[Unset, str]): The IAM role arn to use to access the account.  This can be used as an alternative to
-            providing accessKey and secretKey.
-        bucket (Union[Unset, str]): The external bucket to write to
+        target (str): The type of target for this storage
+        access_key (Union[Unset, str]): Deprecated: use target parameters
+        arn (Union[Unset, str]): Deprecated: use target parameters
+        bucket (Union[Unset, str]): Deprecated: use target instead
         caution_threshold (Union[Unset, int]): Caution threshold capacity for the storage
         clone_restore (Union[Unset, bool]): Create a new clone when restoring this storage
-        cloud_provider (Union[Unset, ApiStorageCreateCloudProvider]): Provider of cloud services (if applicable)
-        credentials (Union[Unset, str]): Credentials as a single element (e.g. Google JSON file)
-        externalid (Union[Unset, str]): The IAM role's external ID.S
+        cloud_provider (Union[Unset, ApiStorageCreateCloudProvider]): Deprecated: use target parameters
+        credentials (Union[Unset, str]): Deprecated: use target parameters
+        externalid (Union[Unset, str]): Deprecated: use target parameters
         link (Union[Unset, str]): The vail bucket to ingest objects to
         optional_data (Union[Unset, int]): Percentage of space available for optional data
-        region (Union[Unset, str]): The region where the account resides
-        secret_key (Union[Unset, str]): The account owner's secret key
+        parameters (Union[Unset, ApiStorageCreateParameters]): Target parameters specific to the target type.
+        pause_notifications (Union[Unset, bool]): Link notifications are paused if true
+        recoverable (Union[Unset, bool]): Additional content is stored to allow third-party recovery
+        region (Union[Unset, str]): Deprecated: use target parameters
+        secret_key (Union[Unset, str]): Deprecated: use target parameters
         storage_class (Union[Unset, ApiStorageCreateStorageClass]): Storage class
-        url (Union[Unset, str]): S3 data path URL (if applicable)
+        type (Union[Unset, ApiStorageCreateType]): Deprecated: use target instead
+        url (Union[Unset, str]): Deprecated: use target parameters
         warning_threshold (Union[Unset, int]): Warning threshold capacity for the storage
     """
 
     endpoint: str
+    item: str
     name: str
-    type: ApiStorageCreateType
+    target: str
     access_key: Union[Unset, str] = UNSET
     arn: Union[Unset, str] = UNSET
     bucket: Union[Unset, str] = UNSET
@@ -49,9 +58,13 @@ class ApiStorageCreate:
     externalid: Union[Unset, str] = UNSET
     link: Union[Unset, str] = UNSET
     optional_data: Union[Unset, int] = UNSET
+    parameters: Union[Unset, "ApiStorageCreateParameters"] = UNSET
+    pause_notifications: Union[Unset, bool] = UNSET
+    recoverable: Union[Unset, bool] = UNSET
     region: Union[Unset, str] = UNSET
     secret_key: Union[Unset, str] = UNSET
     storage_class: Union[Unset, ApiStorageCreateStorageClass] = UNSET
+    type: Union[Unset, ApiStorageCreateType] = UNSET
     url: Union[Unset, str] = UNSET
     warning_threshold: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -59,9 +72,11 @@ class ApiStorageCreate:
     def to_dict(self) -> Dict[str, Any]:
         endpoint = self.endpoint
 
+        item = self.item
+
         name = self.name
 
-        type = self.type.value
+        target = self.target
 
         access_key = self.access_key
 
@@ -85,6 +100,14 @@ class ApiStorageCreate:
 
         optional_data = self.optional_data
 
+        parameters: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.parameters, Unset):
+            parameters = self.parameters.to_dict()
+
+        pause_notifications = self.pause_notifications
+
+        recoverable = self.recoverable
+
         region = self.region
 
         secret_key = self.secret_key
@@ -92,6 +115,10 @@ class ApiStorageCreate:
         storage_class: Union[Unset, str] = UNSET
         if not isinstance(self.storage_class, Unset):
             storage_class = self.storage_class.value
+
+        type: Union[Unset, str] = UNSET
+        if not isinstance(self.type, Unset):
+            type = self.type.value
 
         url = self.url
 
@@ -102,8 +129,9 @@ class ApiStorageCreate:
         field_dict.update(
             {
                 "endpoint": endpoint,
+                "item": item,
                 "name": name,
-                "type": type,
+                "target": target,
             }
         )
         if access_key is not UNSET:
@@ -126,12 +154,20 @@ class ApiStorageCreate:
             field_dict["link"] = link
         if optional_data is not UNSET:
             field_dict["optionalData"] = optional_data
+        if parameters is not UNSET:
+            field_dict["parameters"] = parameters
+        if pause_notifications is not UNSET:
+            field_dict["pauseNotifications"] = pause_notifications
+        if recoverable is not UNSET:
+            field_dict["recoverable"] = recoverable
         if region is not UNSET:
             field_dict["region"] = region
         if secret_key is not UNSET:
             field_dict["secretKey"] = secret_key
         if storage_class is not UNSET:
             field_dict["storageClass"] = storage_class
+        if type is not UNSET:
+            field_dict["type"] = type
         if url is not UNSET:
             field_dict["url"] = url
         if warning_threshold is not UNSET:
@@ -141,12 +177,16 @@ class ApiStorageCreate:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.api_storage_create_parameters import ApiStorageCreateParameters
+
         d = src_dict.copy()
         endpoint = d.pop("endpoint")
 
+        item = d.pop("item")
+
         name = d.pop("name")
 
-        type = ApiStorageCreateType(d.pop("type"))
+        target = d.pop("target")
 
         access_key = d.pop("accessKey", UNSET)
 
@@ -173,6 +213,17 @@ class ApiStorageCreate:
 
         optional_data = d.pop("optionalData", UNSET)
 
+        _parameters = d.pop("parameters", UNSET)
+        parameters: Union[Unset, ApiStorageCreateParameters]
+        if isinstance(_parameters, Unset):
+            parameters = UNSET
+        else:
+            parameters = ApiStorageCreateParameters.from_dict(_parameters)
+
+        pause_notifications = d.pop("pauseNotifications", UNSET)
+
+        recoverable = d.pop("recoverable", UNSET)
+
         region = d.pop("region", UNSET)
 
         secret_key = d.pop("secretKey", UNSET)
@@ -184,14 +235,22 @@ class ApiStorageCreate:
         else:
             storage_class = ApiStorageCreateStorageClass(_storage_class)
 
+        _type = d.pop("type", UNSET)
+        type: Union[Unset, ApiStorageCreateType]
+        if isinstance(_type, Unset):
+            type = UNSET
+        else:
+            type = ApiStorageCreateType(_type)
+
         url = d.pop("url", UNSET)
 
         warning_threshold = d.pop("warningThreshold", UNSET)
 
         api_storage_create = cls(
             endpoint=endpoint,
+            item=item,
             name=name,
-            type=type,
+            target=target,
             access_key=access_key,
             arn=arn,
             bucket=bucket,
@@ -202,9 +261,13 @@ class ApiStorageCreate:
             externalid=externalid,
             link=link,
             optional_data=optional_data,
+            parameters=parameters,
+            pause_notifications=pause_notifications,
+            recoverable=recoverable,
             region=region,
             secret_key=secret_key,
             storage_class=storage_class,
+            type=type,
             url=url,
             warning_threshold=warning_threshold,
         )

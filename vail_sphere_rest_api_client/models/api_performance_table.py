@@ -10,15 +10,19 @@ T = TypeVar("T", bound="ApiPerformanceTable")
 class ApiPerformanceTable:
     """
     Attributes:
+        description (str): Performance table description
         name (str): Performance table name
         title (str): Descriptive title
     """
 
+    description: str
     name: str
     title: str
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        description = self.description
+
         name = self.name
 
         title = self.title
@@ -27,6 +31,7 @@ class ApiPerformanceTable:
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
+                "description": description,
                 "name": name,
                 "title": title,
             }
@@ -37,11 +42,14 @@ class ApiPerformanceTable:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
+        description = d.pop("description")
+
         name = d.pop("name")
 
         title = d.pop("title")
 
         api_performance_table = cls(
+            description=description,
             name=name,
             title=title,
         )

@@ -16,14 +16,18 @@ T = TypeVar("T", bound="ApiLifecycleUpdate")
 class ApiLifecycleUpdate:
     """
     Attributes:
+        after_put (Union[Unset, bool]): True if lifecycle is not used for initial placement
         description (Union[Unset, str]): The lifecycle's description
+        ignore_class (Union[Unset, bool]): True if the storage class requested in a put should be ignored
         markers (Union[Unset, bool]): True if expired delete markers should be deleted
         name (Union[Unset, str]): The lifecycle's name
         rules (Union[Unset, List['ApiRule']]): The lifecycle's rules
         uploads (Union[Unset, int]): The number of days to wait before deleting incomplete multipart uploads
     """
 
+    after_put: Union[Unset, bool] = UNSET
     description: Union[Unset, str] = UNSET
+    ignore_class: Union[Unset, bool] = UNSET
     markers: Union[Unset, bool] = UNSET
     name: Union[Unset, str] = UNSET
     rules: Union[Unset, List["ApiRule"]] = UNSET
@@ -31,7 +35,11 @@ class ApiLifecycleUpdate:
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        after_put = self.after_put
+
         description = self.description
+
+        ignore_class = self.ignore_class
 
         markers = self.markers
 
@@ -49,8 +57,12 @@ class ApiLifecycleUpdate:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if after_put is not UNSET:
+            field_dict["afterPut"] = after_put
         if description is not UNSET:
             field_dict["description"] = description
+        if ignore_class is not UNSET:
+            field_dict["ignoreClass"] = ignore_class
         if markers is not UNSET:
             field_dict["markers"] = markers
         if name is not UNSET:
@@ -67,7 +79,11 @@ class ApiLifecycleUpdate:
         from ..models.api_rule import ApiRule
 
         d = src_dict.copy()
+        after_put = d.pop("afterPut", UNSET)
+
         description = d.pop("description", UNSET)
+
+        ignore_class = d.pop("ignoreClass", UNSET)
 
         markers = d.pop("markers", UNSET)
 
@@ -83,7 +99,9 @@ class ApiLifecycleUpdate:
         uploads = d.pop("uploads", UNSET)
 
         api_lifecycle_update = cls(
+            after_put=after_put,
             description=description,
+            ignore_class=ignore_class,
             markers=markers,
             name=name,
             rules=rules,

@@ -5,8 +5,8 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.api_update_status import ApiUpdateStatus
 from ...models.server_validation_error_response import ServerValidationErrorResponse
-from ...models.worker_update_status import WorkerUpdateStatus
 from ...types import Response
 
 
@@ -23,9 +23,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
+) -> Optional[Union[ApiUpdateStatus, ServerValidationErrorResponse]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = WorkerUpdateStatus.from_dict(response.json())
+        response_200 = ApiUpdateStatus.from_dict(response.json())
 
         return response_200
     if response.status_code == HTTPStatus.NOT_FOUND:
@@ -40,7 +40,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
+) -> Response[Union[ApiUpdateStatus, ServerValidationErrorResponse]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -53,7 +53,7 @@ def sync_detailed(
     id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Response[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
+) -> Response[Union[ApiUpdateStatus, ServerValidationErrorResponse]]:
     """Get an endpoint's software update status
 
     Args:
@@ -64,7 +64,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]
+        Response[Union[ApiUpdateStatus, ServerValidationErrorResponse]]
     """
 
     kwargs = _get_kwargs(
@@ -82,7 +82,7 @@ def sync(
     id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Optional[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
+) -> Optional[Union[ApiUpdateStatus, ServerValidationErrorResponse]]:
     """Get an endpoint's software update status
 
     Args:
@@ -93,7 +93,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[ServerValidationErrorResponse, WorkerUpdateStatus]
+        Union[ApiUpdateStatus, ServerValidationErrorResponse]
     """
 
     return sync_detailed(
@@ -106,7 +106,7 @@ async def asyncio_detailed(
     id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Response[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
+) -> Response[Union[ApiUpdateStatus, ServerValidationErrorResponse]]:
     """Get an endpoint's software update status
 
     Args:
@@ -117,7 +117,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]
+        Response[Union[ApiUpdateStatus, ServerValidationErrorResponse]]
     """
 
     kwargs = _get_kwargs(
@@ -133,7 +133,7 @@ async def asyncio(
     id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Optional[Union[ServerValidationErrorResponse, WorkerUpdateStatus]]:
+) -> Optional[Union[ApiUpdateStatus, ServerValidationErrorResponse]]:
     """Get an endpoint's software update status
 
     Args:
@@ -144,7 +144,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[ServerValidationErrorResponse, WorkerUpdateStatus]
+        Union[ApiUpdateStatus, ServerValidationErrorResponse]
     """
 
     return (
